@@ -113,13 +113,13 @@ At this point you should have the restored file.
 #####Ubuntu
 The below relates to installs compiled from source.
 
-		=== C++ ===
+##### === C++ ===
 		AlethZero
 		~/.ethereum/ (contains the blockchain state)
 		~/.web3 (contains your keys)
 		~/.config/ethereum/alethzero.conf (contains AZ preferences)
 
-Eth
+##### Eth
 
 		~/.ethereum/ (contains the blockchain state and keys, shares them with alethzero)
 		~/.web3 (contains your keys, shares them with alethzero)
@@ -127,9 +127,9 @@ Eth
 For both Eth and AlethZero, the DAG is stored in ~/.ethash
 
 
-		=== Go ===
+##### === Go ===
 
-		Geth:
+##### Geth:
 		~/.ethereum (contains the chain, as well as your keys are in the /keystore subfolder)
 		~/.ethash (contains the DAG when mining)
 
