@@ -231,6 +231,15 @@ At this time the Ethereum software will not install or operate on Tails currentl
  - directly after use or as quickly as possible during the execution of the script, all temp directories and files should be securely destroyed using a tool designed for the purpose which will overwrite the disk locations multiple times using random patterns. It is important to do this 'as you go' so you may ensure the materials are not stranded by a crash, or a user who shuts down the computer before the secure wiping is completed (it can take some time).
  - after use, the memory should be similiarly securely wiped. This probably requires a shutdown to accomplish.
  
+### Printer Issues 
+
+The possibility of the printer working flawlessly every time at the end of the script execution is zero.
+To avoid the case where the script executes and then the printer does not work, it is advisable to default to a test print up front.
+This will force the identification of printer issues prior to any material generation.
+This test print should be switchable (on|off) on the command line where the printer is known to work, or where multiple wallets are being processed in a row.   
  
-   
- 
+An alternative scenario is to require a test print, and use the test print to print the 'back' of the offline wallet.
+This would require the user to retreive the paper from the printer once printed, turn it over, and reload it so the other side could be used for materials.
+The nominal benefit is to print over the areas whihc would otherwise be susceptable to surreptitious viewing from the reverse side. 
+However, this benefit must be weighed against the possibility of the user incorrectly loading the test print back into the printer correctly, or at all.
+
