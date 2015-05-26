@@ -193,7 +193,8 @@ The tutorial author mentions:
 For the paper password, it can be seen in one of the graphics that he has written on the printout of the encrypted wallet file "Klaus has the password".
 This is a strategy of keeping the password redundantly secret by ensuring that a second person also has the secret in case the first person forgets it or is somehow lost to the recovery process.
  
-For an intentional and thoughtful user of Ethereum, this may be functional, but for a casual user, this is insufficient care of the password/passphrase materials, which must also be retained for the Ethereum wallet to be later recoverable from offline storage for subsequent use.The onl;y way to ensure that a casual user will be able to retain and later access the requierd password/passphrase materials is to accept the inherent security risk of placing them on paper for storage and later retrieval.
+For an intentional and thoughtful user of Ethereum, this may be functional, but for a casual user, this is insufficient care of the password/passphrase materials, which must also be retained for the Ethereum wallet to be later recoverable from offline storage for subsequent use.
+The only way to ensure that a casual user will be able to retain and later access the required password/passphrase materials is to accept the inherent security risk of placing them on paper for storage and later retrieval.
 
 Accepting these requirements, the materials which must be stored in some format on paper include:
 
