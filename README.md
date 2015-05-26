@@ -15,10 +15,17 @@ The Ethereum project is approaching a public launch and focussed on technologies
 A script or method for easily creating offline wallets has not been provided by the core team.
 This project attempts to provide a script for rudimentary functionality that may be built upon to securely and easily generate the required cryptographic materials and store them offline.
 
+### Warning
 Having no expertise in Ethereum, this is being used as a learning opportunity.
 The code is provided without warranty or guarantee. 
 Use at your own risk.
 Please contribute via pull requests, or fork for customization.
+
+### Assumptions
+I am using Ubuntu as an OS for my Ethereum activities.
+Ubuntu 14.04 is supported for Ethereum.
+This script is therefore, for now, Ubuntu 14.04 specific.
+ 
 
 ## Background Materials
 These are the materials I assembled as background reading, in attempting to understand how to automate the process of creating offline Ethereum materials.
