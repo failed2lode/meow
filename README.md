@@ -188,7 +188,7 @@ you will note that the author refers to the passwords referenced above as:
  
 The tutorial author mentions:
 
- 		As a last note, I actually included my wallet password (not paper password) on the print outs as I do not consider them to be sensitive. 
+ 		I actually included my wallet password (not paper password) on the print outs as I do not consider them to be sensitive. 
  
 For the paper password, it can be seen in one of the graphics that he has written on the printout of the encrypted wallet file "Klaus has the password".
 This is a strategy of keeping the password redundantly secret by ensuring that a second person also has teh secret in case the first person forgets it or is somehow lost to the recovery process.
@@ -200,10 +200,10 @@ In fact, the materials which must be stored in some format on paper include:
  - the 'wallet' password or passphrase
  - the 'paper' password or passphrase
 
-To care properly for the password/passphrase materials, the following best practuces may apply:
- - generate the material using a generator designed for the task
- - encode the password/passphrase material as a QR code
- - print the encrypted and encoded material on a separate sheet of paper so it may be separately stored.
+To care properly for the password/passphrase (from here on referred to as the 'passx') materials, the following best practices may apply:
+ - generate the passx materials using a generator designed for the task
+ - encode the passx material as a QR code
+ - print the encrypted and encoded passx materials on a separate sheet of paper so it may be separately stored.
  
 Each of the passx materials may be printed and stored separately, or they could be printed on a common sheet of paper, as without the Ethereum wallet material they are without use even if discovered together.     		
 This is true even if the Ethereum address is known, as the address + passx of the Ethereum wallet together are not enough to reconstruct the Ethereum wallet material.
@@ -215,7 +215,7 @@ This method produces two printouts:
 In order to match these at a later date, each printout should include the ethjereum address to which they pertain.
 This address may also be QR encoded and / or barcoded for easy retreival.
 It is expected that after all of this, a casual user will staple the sheets together and throw them in a desk drawer. 
-A more appropriate storage strategy would involve separated storage of copies of the printouts in diverse locations. 
+A more appropriate or 'enterprise' storage strategy will involve separated storage of copies of the printouts in diverse locations. 
 
 ### Attack Vectors
 
