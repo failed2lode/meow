@@ -144,3 +144,78 @@ I will not list Mist settings here as it's under alpha development and rapidly c
 
 #####Conflicts!
 The bad news is, on Ubuntu, both the Go and the C++ client share the same folder for blockchain storage. This means if you'd like to run both on the same machine, you'll have to use either the --datadir argument for Geth or the --db-path on Eth. Mist and Alethzero are however as far as I know not configurable at boot and will therefore lead to clashes, to run both of these the use of VMs is recommended until this is resolved.
+
+## Usability
+
+There are numerous usability hurdles that must be overcome. 
+These span from very important to very trivial.
+This section is not exhaustive, but does contain an overview of the issues I am most interested in addressing.
+
+### Materials Handled and Stored Offline
+
+In the non-interactive use case listed above:
+
+		$ geth --datadir /tmp/eth --password /path/to/password account new
+		Address: b0047c606f3af7392e073ed13253f8f4710b08b6
+
+shown in pseudo-math:
+
+		raw material + passphrase = Ethereum wallet file		
+
+where it is made known elsewhere that all Ethereum wallet files require a passphrase to be usable.
+
+Similarly, where
+
+		$ cat ether.json | openssl des3 > ether.json.des3
+		enter des-ede3-cbc encryption password:
+		Verifying — enter des-ede3-cbc encryption password:		
+
+then		
+
+		Ethereum wallet file + des-ede3-cbc encryption password = encrypted Ethereum wallet file
+
+which when encoded into a QR code:
+
+		encrypted Ethereum Wallet file + QR encoder = QR-encoded encrypted Ethereum wallet file
+
+may be securely printed and later retreived for use with a 'relatively' minimal effort.
+
+In the tutorial at https://medium.com/@abrkn/obtaining-and-offline-securing-ether-for-the-upcoming-ethereum-launch-157963b6a456 referenced above,
+you will note that the author refers to the passwords referenced above as:
+
+ - the 'wallet' password or passphrase
+ - the 'paper' password or passphrase
+ 
+The tutorial author mentions:
+
+ 		As a last note, I actually included my wallet password (not paper password) on the print outs as I do not consider them to be sensitive. 
+ 
+For the paper password, it can be seen in one of the graphics that he has written on the printout of the encrypted wallet file "Klaus has the password".
+This is a strategy of keeping the password redundantly secret by ensuring that a second person also has teh secret in case the first person forgets it or is somehow lost to the recovery process.
+ 
+For an intentional and thoughtful user of Ethereum, this may be functional, but for a casual user, this is insufficient care of the password/passphrase materials, which must also be retained for the Ethereum wallet to be later recoverable from offline storage for subsequent use.
+In fact, the materials which must be stored in some format on paper include:
+
+ - the Ethereum wallet file
+ - the 'wallet' password or passphrase
+ - the 'paper' password or passphrase
+
+To care properly for the password/passphrase materials, the following best practuces may apply:
+ - generate the material using a generator designed for the task
+ - encode the password/passphrase material as a QR code
+ - print the encrypted and encoded material on a separate sheet of paper so it may be separately stored.
+ 
+Each of the passx materials may be printed and stored separately, or they could be printed on a common sheet of paper, as without the Ethereum wallet material they are without use even if discovered together.     		
+This is true even if the Ethereum address is known, as the address + passx of the Ethereum wallet together are not enough to reconstruct the Ethereum wallet material.
+
+This method produces two printouts:
+ - the encoded encrypted Ethereum wallet printout
+ - the encoded (but not encrypted) passx printout
+  
+In order to match these at a later date, each printout should include the ethjereum address to which they pertain.
+This address may also be QR encoded and / or barcoded for easy retreival.
+It is expected that after all of this, a casual user will staple the sheets together and throw them in a desk drawer. 
+A more appropriate storage strategy would involve separated storage of copies of the printouts in diverse locations. 
+
+
+				
