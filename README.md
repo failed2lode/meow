@@ -21,7 +21,7 @@ Use at your own risk.
 Please contribute via pull requests, or fork for customization.
 
 ## Background Materials
-These are the materials I assembled as background reading, in attemptibg to understand how to automate the process of creating offline Ethereum materials.
+These are the materials I assembled as background reading, in attempting to understand how to automate the process of creating offline Ethereum materials.
 
 #### https://github.com/ethereum/go-ethereum/wiki/Mining
 
@@ -108,3 +108,32 @@ To restore:
 
 At this point you should have the restored file.
 
+####http://forum.ethereum.org/discussion/2114/where-are-my-config-files-go-and-cpp/p1
+
+#####Ubuntu
+The below relates to installs compiled from source.
+
+		=== C++ ===
+		AlethZero
+		~/.ethereum/ (contains the blockchain state)
+		~/.web3 (contains your keys)
+		~/.config/ethereum/alethzero.conf (contains AZ preferences)
+
+Eth
+
+		~/.ethereum/ (contains the blockchain state and keys, shares them with alethzero)
+		~/.web3 (contains your keys, shares them with alethzero)
+
+For both Eth and AlethZero, the DAG is stored in ~/.ethash
+
+
+		=== Go ===
+
+		Geth:
+		~/.ethereum (contains the chain, as well as your keys are in the /keystore subfolder)
+		~/.ethash (contains the DAG when mining)
+
+I will not list Mist settings here as it's under alpha development and rapidly changing. Your mileage may vary.
+
+#####Conflicts!
+The bad news is, on Ubuntu, both the Go and the C++ client share the same folder for blockchain storage. This means if you'd like to run both on the same machine, you'll have to use either the --datadir argument for Geth or the --db-path on Eth. Mist and Alethzero are however as far as I know not configurable at boot and will therefore lead to clashes, to run both of these the use of VMs is recommended until this is resolved.
