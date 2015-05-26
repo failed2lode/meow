@@ -211,11 +211,11 @@ However, from a usability perspective there is little choice:
  - the passx material needs to be stored somewhere
  - most casual users do not have password managers
  - passsword manager usage is usually inconsistent and has a high churn rate even among concerned users
- - encrypting the passx materials would reguire generation of an additional set of passx materials which would then require storage
+ - encrypting the passx materials would require generation of an additional set of passx materials which would then require storage
  - etc.
  
 In short, there is no good solution to the passx storage problem.
-Rather than gloss over it ("Klaus has a copy") this is an intentioamnl strategy to balance usability with obfuscation:
+Rather than gloss over it ("Klaus has a copy") this is an intentional strategy to balance usability with obfuscation:
  - the QR encoded masterials cannot be casually decoded
  - no unencoded versions are displayed or provided
  - QR decoders are required for the other materials, so they are in theory usable here
