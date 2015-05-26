@@ -217,5 +217,20 @@ This address may also be QR encoded and / or barcoded for easy retreival.
 It is expected that after all of this, a casual user will staple the sheets together and throw them in a desk drawer. 
 A more appropriate storage strategy would involve separated storage of copies of the printouts in diverse locations. 
 
+### Attack Vectors
 
-				
+The best scenario for running a tool like this would be to install it on a copy of Tails, which would destroy all evidence of it's operation when complete through the Amnesic characteristics of it's operation.
+At this time the Ethereum software will not install or operate on Tails currently, so we must intentionally replicate the destruction of all records of operation:
+
+ - where possible, all temp files should be constrained to a single directory. It may be useful to set this disk up as a ram disk to facilitate subsequent secure removal.
+ - where temp files cannot be constrained to the target temp directly, they will need to be explicltly identified and securely wiped
+ - materials should never be displayed on the monitor
+ - passx materials should not be requested from users
+ - a scrambled full page footer should be printed after the printing is complete, to 'reset' the printer in case the image may be retained on the print head.				
+ - where possible, printing should be limited to directly connected printers to avoid the possibility of copies of the materials being stored in a print queue or being retained in some other way 
+ - directly after use or as quickly as possible during the execution of the script, all temp directories and files should be securely destroyed using a tool designed for the purpose which will overwrite the disk locations multiple times using random patterns. It is important to do this 'as you go' so you may ensure the materials are not stranded by a crash, or a user who shuts down the computer before the secure wiping is completed (it can take some time).
+ - after use, the memory should be similiarly securely wiped. This probably requires a shutdown to accomplish.
+ 
+ 
+   
+ 
