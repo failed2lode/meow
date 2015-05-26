@@ -219,11 +219,11 @@ A more appropriate storage strategy would involve separated storage of copies of
 
 ### Attack Vectors
 
-The best scenario for running a tool like this would be to install it on a copy of Tails, which would destroy all evidence of it's operation when complete through the Amnesic characteristics of it's operation.
-At this time the Ethereum software will not install or operate on Tails currently, so we must intentionally replicate the destruction of all records of operation:
+The best scenario for running a tool like this would be to install it on a copy of Tails, which would destroy all evidence of its operation when complete through the Amnesic characteristics of it's operation.
+At this time the Ethereum software will not install or operate on Tails, so we must intentionally replicate the destruction of all records of operation:
 
  - where possible, all temp files should be constrained to a single directory. It may be useful to set this disk up as a ram disk to facilitate subsequent secure removal.
- - where temp files cannot be constrained to the target temp directly, they will need to be explicltly identified and securely wiped
+ - where temp files cannot be constrained to the target temp directly, they will need to be explicltly identified
  - materials should never be displayed on the monitor
  - passx materials should not be requested from users
  - a scrambled full page footer should be printed after the printing is complete, to 'reset' the printer in case the image may be retained on the print head.				
@@ -239,7 +239,7 @@ This will force the identification of printer issues prior to any material gener
 This test print should be switchable (on|off) on the command line where the printer is known to work, or where multiple wallets are being processed in a row.   
  
 An alternative scenario is to require a test print, and use the test print to print the 'back' of the offline wallet.
-This would require the user to retreive the paper from the printer once printed, turn it over, and reload it so the other side could be used for materials.
-The nominal benefit is to print over the areas whihc would otherwise be susceptable to surreptitious viewing from the reverse side. 
-However, this benefit must be weighed against the possibility of the user incorrectly loading the test print back into the printer correctly, or at all.
+This would require the user to retreive the paper from the printer once printed, turn it over, and reload it so the other side may be used for materials.
+The nominal benefit is to print over the areas which would otherwise be susceptable to surreptitious viewing from the reverse side. 
+However, this benefit must be weighed against the possibility of the user incorrectly loading the test print back into the printer correctly, if they bother to do it at all.
 
