@@ -205,7 +205,7 @@ Accepting these requirements, the materials which must be stored in some format 
 To care properly for the password/passphrase (from here on referred to as the 'passx') materials, the following best practices may apply:
  - generate the passx materials using a generator designed for the task
  - encode the passx material as a QR code
- - print the encoded passx materials on a separate sheet of paper so it may be separately stored.
+ - print the encoded passx materials on a separate sheet of paper so they may be separately stored.
  
 Note the storage of the passx materials on paper in unencrypted format will make some people uneasy. 
 This is a valid concern, as unencrypted materials are intrinsically vulnerable.
