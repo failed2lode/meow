@@ -203,7 +203,22 @@ In fact, the materials which must be stored in some format on paper include:
 To care properly for the password/passphrase (from here on referred to as the 'passx') materials, the following best practices may apply:
  - generate the passx materials using a generator designed for the task
  - encode the passx material as a QR code
- - print the encrypted and encoded passx materials on a separate sheet of paper so it may be separately stored.
+ - print the encoded passx materials on a separate sheet of paper so it may be separately stored.
+ 
+Note the storage of the passx materials on paper in unencrypted format will make some people uneasy. 
+This is a valid concern, as unencrypted materials are intrinsically vulnerable.
+However, from a usability perspective there is little choice:
+ - the passx material needs to be stored somewhere
+ - most casual users do not have password managers
+ - passsword manager usage is usually inconsistent and has a high churn rate even among concerned users
+ - encrypting the passx materials would reguire generation of an additional set of passx materials which would then require storage
+ - etc.
+ 
+In short, there is no good solution to the passx storage problem.
+Rather than gloss over it ("Klaus has a copy") this is an intentioamnl strategy to balance usability with obfuscation:
+ - the QR encoded masterials cannot be casually decoded
+ - no unencoded versions are displayed or provided
+ - QR decoders are required for the other materials, so they are in theory usable here
  
 Each of the passx materials may be printed and stored separately, or they could be printed on a common sheet of paper, as without the Ethereum wallet material they are without use even if discovered together.     		
 This is true even if the Ethereum address is known, as the address + passx of the Ethereum wallet together are not enough to reconstruct the Ethereum wallet material.
@@ -212,7 +227,7 @@ This method produces two printouts:
  - the encoded encrypted Ethereum wallet printout
  - the encoded (but not encrypted) passx printout
   
-In order to match these at a later date, each printout should include the ethjereum address to which they pertain.
+In order to match these at a later date, each printout should include the Ethereum address to which they pertain.
 This address may also be QR encoded and / or barcoded for easy retreival.
 It is expected that after all of this, a casual user will staple the sheets together and throw them in a desk drawer. 
 A more appropriate or 'enterprise' storage strategy will involve separated storage of copies of the printouts in diverse locations. 
