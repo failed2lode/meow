@@ -216,7 +216,7 @@ However, from a usability perspective there is little choice:
  
 In short, there is no good solution to the passx storage problem.
 Rather than gloss over it ("Klaus has a copy") this is an intentional strategy to balance usability with obfuscation:
- - the QR encoded masterials cannot be casually decoded
+ - the QR encoded materials cannot be casually decoded
  - no unencoded versions are displayed or provided
  - QR decoders are required for the other materials, so they are in theory usable here
  
