@@ -260,3 +260,6 @@ This would require the user to retreive the paper from the printer once printed,
 The nominal benefit is to print over the areas which would otherwise be susceptable to surreptitious viewing from the reverse side. 
 However, this benefit must be weighed against the possibility of the user incorrectly loading the test print back into the printer correctly, if they bother to do it at all.
 
+## Retrieval
+
+It is tempting to focus on the issues of generation and ignore the complexities of subsequent retrieval.
