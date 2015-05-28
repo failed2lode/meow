@@ -101,10 +101,25 @@
 #
 #
 # -- encrypt the ethereum wallet material
+#   # assuming we are using some sort of python openssl implementation so not too concerned about getting command line arguments here right
+# walletMaterialEncrypted = openssl(walletMaterial, paperPassxMaterial)
+# 
+#  # It's not clear to me if we need to uuencode/xxd the output of the encryption step if we are storing it in a QRcode.
+#  # for sake of following  a known good tutorial, I am going to include it
+#  # if it turns out to be unnecessary, this is an invitation to pull request it out.
+#  # again, assuming there is some pythoin implementation so not too worried yet about syntax
+# walletMaterialEncryptedUuencoded = uuencode(walletMaterialEncrypted)
+#
+#
+# -- QR encode the encrypted encoded wallet material
 #
 #
 #
-# -- QR encode the encrypted wallet material
+#
+#
+#
+#
+#
 #
 #
 # -- Securely delete anything that is not a QR encoded material
