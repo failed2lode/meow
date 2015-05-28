@@ -77,6 +77,7 @@
 # walletMaterial = file.read(walletMaterialDirectory/whateverthe walletnameconstructis
 # srm -r walletMaterialDirectory
 #
+#  # note there are lots of issues with srm, wipe, etc, in journalled file sywtems and ssd volumes. so this is not a solution, it is an attempt to mitigate which may be very ineffective.
 #
 # -- generate paperPassx material
 # 	# use apg to generate strong password material. see http://linux.die.net/man/1/apg for man page. 
@@ -87,13 +88,18 @@
 #  
 #
 # -- QRencode paperPassx material
+#  # order of operations is important here: you must delete the qr codes as you go to ensure they qre not ever all on the disk at the same time.
 #  # make it a QR code directly using qrencode http://packages.ubuntu.com/trusty/qrencode -> libqrencode from http://fukuchi.org/works/qrencode/index.html.en
 #  # man page: http://manpages.ubuntu.com/manpages/trusty/man1/qrencode.1.html
 #
 # paperPassxMaterialEncodedFilename = apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
 # qrencode -o paperPassxMaterialDirectory/paperPassxMaterialEncodedFilename paperPassxMaterial
 #
-#  
+#  # now immediately read the qr encoded material into memory and delete it from the disk. 
+# paperPassxMaterialEncoded = file.read(paperPassxMaterialDirectory/paperPassxMaterialEncodedFilename)
+# srm -r paperPassxMaterialDirectory
+#
+#
 # -- encrypt the ethereum wallet material
 #
 #
