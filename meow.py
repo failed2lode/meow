@@ -74,8 +74,9 @@
 # walletPassxMaterialEncoded = file.read(walletPassxMaterialDirectory/walletPassxMaterialEncodedFilename)
 # srm -r walletPassxMaterialDirectory
 #
-# walletMaterial = file.read(walletMaterialDirectory/whateverthe walletnameconstructis
-# srm -r walletMaterialDirectory
+# walletMaterial = file.read(walletMaterialDirectory/whateverthe walletnameconstructis)
+#  # note you don't want to delete this directory yet as you want to re-use it to store the qrencoded encrypted walletMaterial later  
+# srm walletMaterialDirectory/whateverthe walletnameconstructis
 #
 #  # note there are lots of issues with srm, wipe, etc, in journalled file sywtems and ssd volumes. so this is not a solution, it is an attempt to mitigate which may be very ineffective.
 #
@@ -112,18 +113,16 @@
 #
 #
 # -- QR encode the encrypted encoded wallet material
+#  # generate a filename for it
+# walletMaterialEncryptedEncodedFilename = apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
+
+# qrencode -o walletMaterialDirectory/walletMaterialEncryptedEncodedFilename walletMaterialEncryptedUuencoded
 #
+#  # now immediately read the qr encoded material into memory and delete it from the disk. 
+# walletMaterialEncryptedEncoded = file.read(walletMaterialDirectory/walletMaterialEncryptedEncodedFilename)
+#  # you don't need to retain this directory anymore
+# srm -r walletMaterialDirectory
 #
-#
-#
-#
-#
-#
-#
-#
-#
-# -- Securely delete anything that is not a QR encoded material
-# 
 #
 # -- lay out page 1: encrypted encoded ethereum wallet material printout
 #
