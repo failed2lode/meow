@@ -103,8 +103,32 @@
 #
 #
 # -- lay out page 1: encrypted encoded ethereum wallet material printout
+#  # using python image library. see http://effbot.org/imagingbook/image.htm and various other pages at the url.
+#  # this is abbreviated pseudo-code but you get the idea
+#
+# from PIL import Image
+# page_1 = Image.new("RGB", (2550, 3300), "white")  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
+# 
+#  # open files to use in this page
+#  walletPassxMaterialEncodedPIL     = Image.open("walletPassxMaterialDirectory/walletPassxMaterialEncodedFilename")
+#  paperPassxMaterialEncodedPIL      = Image.open("paperPassxMaterialDirectory/paperPassxMaterialEncodedFilename")
+#
+#
+#
+#
+# 
+
+
+
+
+
+
 #
 # -- lay out page 2: encoded wallet passx and encoded paper passx
+# page_2 = Image.new("RGB", (2550, 3300), "white")  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
+#
+#  walletMaterialEncryptedEncodedPIL = Image.open("walletMaterialDirectory/walletMaterialEncryptedEncodedFilename")
+#
 #
 # -- securely delete everything you have not deleted yet
 # -- remove persistent items from disk
