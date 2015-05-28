@@ -239,16 +239,30 @@ A more appropriate or 'enterprise' storage strategy will involve separated stora
 The best scenario for running a tool like this would be to install it on a copy of Tails, which would destroy all evidence of its operation when complete through the Amnesic characteristics of it's operation.
 At this time the Ethereum software will not install or operate on Tails, so we must intentionally replicate the destruction of all records of operation:
 
- - where possible, all temp files should be constrained to a single directory. It may be useful to set this disk up as a ram disk to facilitate subsequent secure removal.
- - where temp files cannot be constrained to the target temp directly, they will need to be explicltly identified
+#### Persistence
+
+This version of the script uses the geth command line to generate the Ethereum wallet materials.
+The Geth command line requires the wallet password to be stored in plain text and passed on the command line.
+Similiarly, the output is stored in plain text in a file for subsequent use.
+For an offline wallet generation system, this is all highly insecure.
+
+Because I am new to this, I am accepting these risks in the first version, and then putting in place some mitigations.
+Once the v1 system is in place, and I have worked out all the other MVP issues, 
+I will go back and 'knock out'; the wallet generation sections and replace them with in-memory wallet generation based on the python Ethereum clients.
+This will require help, which is easier to get when you are modifying an existing working system.
+
+so to recap: 
+ - version 1 (this): insecure as there is persistence 'baked in' to the architecture
+ - version 2 (when I get there): remove the persistence issues by flipping to in-memory wallet and gfx generation 
+
+thoughts on mitigating the security holes created by the presence of persistence issues in this current version:
+ - temp files will be placed in multiple randomly named directories and randomly named to make them harder to harvest during script operation.
+ - If possible files will be encrypted while stored. not alwas possible as some need to be in plantext for at least some periods of time.
  - materials should never be displayed on the monitor
- - passx materials should not be requested from users
- - a scrambled full page footer should be printed after the printing is complete, to 'reset' the printer in case the image may be retained on the print head.				
- - where possible, printing should be limited to directly connected printers to avoid the possibility of copies of the materials being stored in a print queue or being retained in some other way 
  - directly after use or as quickly as possible during the execution of the script, all temp directories and files should be securely destroyed using a tool designed for the purpose which will overwrite the disk locations multiple times using random patterns. It is important to do this 'as you go' so you may ensure the materials are not stranded by a crash, or a user who shuts down the computer before the secure wiping is completed (it can take some time).
  - after use, the memory should be similiarly securely wiped. This probably requires a shutdown to accomplish.
  
-### Printer Issues 
+#### Printer Issues 
 
 The possibility of the printer working flawlessly every time at the end of the script execution is zero.
 To avoid the case where the script executes and then the printer does not work, it is advisable to default to a test print up front.
@@ -259,6 +273,20 @@ An alternative scenario is to require a test print, and use the test print to pr
 This would require the user to retreive the paper from the printer once printed, turn it over, and reload it so the other side may be used for materials.
 The nominal benefit is to print over the areas which would otherwise be susceptable to surreptitious viewing from the reverse side. 
 However, this benefit must be weighed against the possibility of the user incorrectly loading the test print back into the printer correctly, if they bother to do it at all.
+
+other thoughts about printing:
+ - a scrambled full page footer should be printed after the printing is complete, to 'reset' the printer in case the image may be retained on the print head.				
+ - where possible, printing should be limited to directly connected printers to avoid the possibility of copies of the materials being stored in a print queue or being retained in some other way 
+
+#### Stupidity
+
+Never ascribe to malice what you can explain with stupidity.
+Loss of passx material is always going to be a leading cause of loss of digital currency.
+Use of weak or er-sued passx material is surely going to be a candidate for second place.
+To address these certain eventualities:
+
+ - passx materials should not be requested from users: it makes them think they can remember them; what really happens is they either forget them or write them down and then lose them.
+ - passx materials should always be generated by strong generators: weak / re-used passwords are not more easily remembered, just more easily cracked.
 
 ## Retrieval
 
