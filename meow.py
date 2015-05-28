@@ -51,16 +51,31 @@
 #  # make it a QR code directly using qrencode http://packages.ubuntu.com/trusty/qrencode -> libqrencode from http://fukuchi.org/works/qrencode/index.html.en
 #  # man page: http://manpages.ubuntu.com/manpages/trusty/man1/qrencode.1.html
 #
-# walletPassxMaterialEncodedFilename = apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
-# qrencode -o walletPassxMaterialDirectory/walletPassxMaterialEncodedFilename walletPassxMaterial
-#
+#  walletPassxMaterial = file.read(walletPassxMaterialDirectory/walletPassxMaterialFilename)
+#  qrencode -o walletPassxMaterialDirectory/walletPassxMaterialEncodedFilename walletPassxMaterial
+# 
 #
 # -- generate Ethereum wallet material
-#   # use geth in non-interactive mode to create Ethereum wallet material
+#   # in this v1 we use geth in non-interactive mode to create Ethereum wallet material
 #   # see https://github.com/ethereum/go-ethereum/wiki/Managing-your-accounts
 #
 #  ethereumWalletAddress = geth --datadir WalletMaterialDirectory --password WalletPassxMaterialDirectory/WalletPassxMaterialFilename account new
 #  # returns:   Address: b0047c606f3af7392e073ed13253f8f4710b08b6
+#
+#  # note this is very insecure as it requires use of a plaintext password file and returns a plaintext wallet file.
+#  # in next version remove this and move to in-memory wallet gen using python code from pythereum or similiar 
+#  # not doing in this version as I do not understand that code and want to get an MVP knocked out for demo purposes
+#
+#
+# -- remove persistent items from disk
+#  # the Ethereum wallet and the wallet passx material are at this moment in plaintext on the disk
+#  # load them into memory immediately and securely delete them from the disk
+#
+# walletPassxMaterialEncoded = file.read(walletPassxMaterialDirectory/walletPassxMaterialEncodedFilename)
+# srm -r walletPassxMaterialDirectory
+#
+# walletMaterial = file.read(walletMaterialDirectory/whateverthe walletnameconstructis
+# srm -r walletMaterialDirectory
 #
 #
 # -- generate paperPassx material
@@ -83,7 +98,7 @@
 #
 #
 #
-# -- QR encode the ethereum wallet material
+# -- QR encode the encrypted wallet material
 #
 #
 # -- Securely delete anything that is not a QR encoded material
