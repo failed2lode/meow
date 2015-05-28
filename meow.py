@@ -67,19 +67,7 @@
 #  # not doing in this version as I do not understand that code and want to get an MVP knocked out for demo purposes
 #
 #
-# -- remove persistent items from disk
-#  # the Ethereum wallet and the wallet passx material are at this moment in plaintext on the disk
-#  # load them into memory immediately and securely delete them from the disk
-#
-# walletPassxMaterialEncoded = file.read(walletPassxMaterialDirectory/walletPassxMaterialEncodedFilename)
-# srm -r walletPassxMaterialDirectory
-#
-# walletMaterial = file.read(walletMaterialDirectory/whateverthe walletnameconstructis)
-#  # note you don't want to delete this directory yet as you want to re-use it to store the qrencoded encrypted walletMaterial later  
-# srm walletMaterialDirectory/whateverthe walletnameconstructis
-#
-#  # note there are lots of issues with srm, wipe, etc, in journalled file sywtems and ssd volumes. so this is not a solution, it is an attempt to mitigate which may be very ineffective.
-#
+
 # -- generate paperPassx material
 # 	# use apg to generate strong password material. see http://linux.die.net/man/1/apg for man page. 
 #   # paperPassx material does not need to be saved to a file.
@@ -96,10 +84,6 @@
 # paperPassxMaterialEncodedFilename = apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
 # qrencode -o paperPassxMaterialDirectory/paperPassxMaterialEncodedFilename paperPassxMaterial
 #
-#  # now immediately read the qr encoded material into memory and delete it from the disk. 
-# paperPassxMaterialEncoded = file.read(paperPassxMaterialDirectory/paperPassxMaterialEncodedFilename)
-# srm -r paperPassxMaterialDirectory
-#
 #
 # -- encrypt the ethereum wallet material
 #   # assuming we are using some sort of python openssl implementation so not too concerned about getting command line arguments here right
@@ -108,20 +92,14 @@
 #  # It's not clear to me if we need to uuencode/xxd the output of the encryption step if we are storing it in a QRcode.
 #  # for sake of following  a known good tutorial, I am going to include it
 #  # if it turns out to be unnecessary, this is an invitation to pull request it out.
-#  # again, assuming there is some pythoin implementation so not too worried yet about syntax
+#  # again, assuming there is some python implementation so not too worried yet about syntax
 # walletMaterialEncryptedUuencoded = uuencode(walletMaterialEncrypted)
 #
 #
 # -- QR encode the encrypted encoded wallet material
 #  # generate a filename for it
 # walletMaterialEncryptedEncodedFilename = apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
-
 # qrencode -o walletMaterialDirectory/walletMaterialEncryptedEncodedFilename walletMaterialEncryptedUuencoded
-#
-#  # now immediately read the qr encoded material into memory and delete it from the disk. 
-# walletMaterialEncryptedEncoded = file.read(walletMaterialDirectory/walletMaterialEncryptedEncodedFilename)
-#  # you don't need to retain this directory anymore
-# srm -r walletMaterialDirectory
 #
 #
 # -- lay out page 1: encrypted encoded ethereum wallet material printout
@@ -129,6 +107,15 @@
 # -- lay out page 2: encoded wallet passx and encoded paper passx
 #
 # -- securely delete everything you have not deleted yet
+# -- remove persistent items from disk
+#  # the Ethereum wallet and the passx materials are at this moment in plaintext on the disk
+#  # securely delete them from the disk
+#
+# srm -r walletPassxMaterialDirectory
+# srm -r walletMaterialDirectory
+# srm -r paperPassxMaterialDirectory
+#
+#  # note there are lots of issues with srm, wipe, etc, in journalled file sywtems and ssd volumes. so this is not a solution, it is an attempt to mitigate which may be very ineffective.
 #
 #
 #
