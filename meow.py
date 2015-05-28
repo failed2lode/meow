@@ -124,6 +124,10 @@
 # 
 #  # it would be fun to put a meow header image here... 
 #
+#  # write the wallet name on all the things
+# wallet_address_string = "the address of this Ethereum Offline wallet is " + ethereumWalletAddress
+# page_1.draw.text((x, y),wallet_address_srting,(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
+#
 # page_1.draw.text((x, y),"This is the password to decode the QR code of the wallet file...",(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
 # page_1.paste(walletPassxMaterialEncodedPIL, (x,y))
 #
