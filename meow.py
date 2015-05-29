@@ -67,6 +67,7 @@
 # -- create temp directories --
 # the idea here is to use random sort of hidden '.' directories and never place materials together in a single directory. No idea how effective this will be.
 # as a random thought, is there a way to create a temp ram disk to stick this in to promote absolute destruction when we don't need it anymore?
+# it would also be good to encrypt anything held to disk. how to implement that?
 #
 #		walletPassxMaterialDirectory = mkdir /tmp + /. + apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
 #		walletMaterialDirectory      = mkdir /tmp + /. + apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
