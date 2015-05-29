@@ -36,7 +36,7 @@
 # from PIL import ImageDraw # do this once
 # font = ImageFont.truetype("sans-serif.ttf", 16)
 #
-
+#
 # -- print test page --
 #
 #  splash "print test page now?" (yes | don't bother | quit)
@@ -57,10 +57,11 @@
 #    # maybe a meow footer of some kind too
 #  
 #    # print it
-#    test_page.save("/dev/lpr")
+#      do while testPrintSuccess = retry {
+#            test_page.save("/dev/lpr")
 #
-# 	 splash "was test print successful?" (yes | retry | quit)
-#
+# 	         splash "was test print successful?" (testPrintSuccess= yes | retry | quit)
+#       }
 #
 #
 # -- create temp directories --
@@ -221,6 +222,7 @@
 #  # do we need to anything else to shut down?
 #  # for instance, do we need to explicitly free up variables and / or wipe memory?
 #  
+#  # variable deletion (not guaranteed to eliminate traces)
 # Delete test_page
 # Delete walletPassxMaterial
 # Delete wallet_address_string
