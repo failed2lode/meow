@@ -20,7 +20,12 @@
 #
 # meow generate 
 #
-# splash
+# -- splash
+#
+#  # may want to put a message box up at some point with a graphic and a rolling message log so users can see that something is happening
+#
+#
+#
 #
 # -- Set Up page layout stuff
 #  # using python image library. see http://effbot.org/imagingbook/image.htm and various other pages at the url.
@@ -199,18 +204,35 @@
 # -- send the pages to the printer
 #  # the way you do this is simply to 'save' them to /dev/lpr
 #
-# page_1.save("/dev/lpr")
-# page_2.save("/dev/lpr")
+#   while successPrinting = retry {
+#       page_1.save("/dev/lpr")
+#       page_2.save("/dev/lpr")
+#   
+#       splash "was print successful?" (successPrinting = yes | retry | quit)
 #
-#   # could it be that easy? prob not. what happens here if the print fails? do we offer any sort of recovery?
-#
-#
-#
-#
-#
+#       }
 #
 #
+#   # could it be that easy? prob not.
 #
+#
+# -- termination
+#
+#  # do we need to anything else to shut down?
+#  # for instance, do we need to explicitly free up variables and / or wipe memory?
+#  
+# Delete test_page
+# Delete walletPassxMaterial
+# Delete wallet_address_string
+# Delete paperPassxMaterial
+# Delete walletMaterialEncrypted
+# Delete page_1
+# Delete walletPassxMaterialEncodedPIL
+# Delete paperPassxMaterialEncodedPIL
+# Delete page2
+# Delete walletMaterialEncryptedEncodedPIL
+# Delete
+# Delete
 #
 #
 #
