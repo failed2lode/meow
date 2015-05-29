@@ -102,11 +102,19 @@
 # qrencode -o walletMaterialDirectory/walletMaterialEncryptedEncodedFilename walletMaterialEncryptedUuencoded
 #
 #
-# -- lay out page 1: encoded wallet passx and encoded paper passx
+# -- Set Up page layout stuff
 #  # using python image library. see http://effbot.org/imagingbook/image.htm and various other pages at the url.
 #  # this is abbreviated pseudo-code but you get the idea
 #
 # from PIL import Image # do this once
+# from PIL import ImageFont # do this once
+# from PIL import ImageDraw # do this once
+# font = ImageFont.truetype("sans-serif.ttf", 16)
+# wallet_address_string = "the address of this Ethereum Offline wallet is " + ethereumWalletAddress
+#
+#
+# -- lay out page 1: encoded wallet passx and encoded paper passx
+#
 # page_1 = Image.new("RGB", (2550, 3300), "white")  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
 #  #  we could also use a meow background image of some kind ??
 #
@@ -114,19 +122,12 @@
 # walletPassxMaterialEncodedPIL     = Image.open("walletPassxMaterialDirectory/walletPassxMaterialEncodedFilename")
 # paperPassxMaterialEncodedPIL      = Image.open("paperPassxMaterialDirectory/paperPassxMaterialEncodedFilename")
 #
-#  # Define font to be used
-# from PIL import ImageFont
-# from PIL import ImageDraw 
-# font = ImageFont.truetype("sans-serif.ttf", 16)
-#
-
 #  #lay out the page
 # 
 #  # it would be fun to put a meow header image here... 
 #
 #  # write the wallet name on all the things
-# wallet_address_string = "the address of this Ethereum Offline wallet is " + ethereumWalletAddress
-# page_1.draw.text((x, y),wallet_address_srting,(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
+# page_1.draw.text((x, y),wallet_address_string,(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
 #
 # page_1.draw.text((x, y),"This is the password to decode the QR code of the wallet file...",(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
 # page_1.paste(walletPassxMaterialEncodedPIL, (x,y))
@@ -134,7 +135,7 @@
 # page_1.draw.text((x, y),"This is the wallet password, to use when you are using the wallet file to make transactions...",(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
 # page_1.paste(walletPassxMaterialEncodedPIL, (x,y))
 #
-#
+#  # maybe a meow footer of some kind too
 #
 #
 #
@@ -149,15 +150,18 @@
 #  # open files to use in this page
 # walletMaterialEncryptedEncodedPIL = Image.open("walletMaterialDirectory/walletMaterialEncryptedEncodedFilename")
 #
+#  #lay out the page
+# 
+#  # it would be fun to put a meow header image here... 
+#
+#  # write the wallet name on all the things
+# page_2.draw.text((x, y),wallet_address_string,(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
+#
+# page_2.draw.text((x, y),"This is the QR code of the wallet file...",(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
+# page_2.paste(walletMaterialEncryptedEncodedPIL, (x,y))
 #
 #
-#
-#
-#
-#
-#
-#
-#
+#  # maybe a meow footer of some kind too
 #
 #
 # -- securely delete everything you have not deleted yet
