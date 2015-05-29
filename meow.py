@@ -11,7 +11,6 @@
 #
 # meow 
 #      generate        
-#                 -testprint # print test page ( on | off )
 #      
 #       decode
 #                 - directory # use the specified directory as a target directory ( what is the default?)        
@@ -22,12 +21,42 @@
 # meow generate 
 #
 # splash
-# 
+#
+# -- Set Up page layout stuff
+#  # using python image library. see http://effbot.org/imagingbook/image.htm and various other pages at the url.
+#  # this is abbreviated pseudo-code but you get the idea
+#
+# from PIL import Image # do this once
+# from PIL import ImageFont # do this once
+# from PIL import ImageDraw # do this once
+# font = ImageFont.truetype("sans-serif.ttf", 16)
+#
+
 # -- print test page --
-# if print test page
-# 		splash "print test page now?" (yes | don't bother | quit)
-#		Print test page
-# 		splash "was test print successful?" (yes | retry | quit)
+#
+#  splash "print test page now?" (yes | don't bother | quit)
+#  if print test page
+#   test_page = Image.new("RGB", (2550, 3300), "white")  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
+#       #  we could also use a meow background image of some kind ??
+#
+#    #lay out the page
+# 
+#    # it would be fun to put a meow header image here... 
+#
+#    test_page.draw.text((x, y),"This test page is being printed to ensure your printer is working.",(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
+#    test_page.paste(walletPassxMaterialEncodedPIL, (x,y))
+#
+#    test_page.draw.text((x, y),"This is the wallet password, to use when you are using the wallet file to make transactions...",(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
+#    test_page.paste(walletPassxMaterialEncodedPIL, (x,y))
+#
+#    # maybe a meow footer of some kind too
+#  
+#    # print it
+#    test_page.save("/dev/lpr")
+#
+# 	 splash "was test print successful?" (yes | retry | quit)
+#
+#
 #
 # -- create temp directories --
 # the idea here is to use random sort of hidden '.' directories and never place materials together in a single directory. No idea how effective this will be.
@@ -61,7 +90,9 @@
 #
 #  ethereumWalletAddress = geth --datadir WalletMaterialDirectory --password WalletPassxMaterialDirectory/WalletPassxMaterialFilename account new
 #  # returns:   Address: b0047c606f3af7392e073ed13253f8f4710b08b6
-#
+#  # use this to generate an address string for pater printing
+# wallet_address_string = "the address of this Ethereum Offline wallet is " + ethereumWalletAddress
+
 #  # note this is very insecure as it requires use of a plaintext password file and returns a plaintext wallet file.
 #  # in next version remove this and move to in-memory wallet gen using python code from pythereum or similiar 
 #  # not doing in this version as I do not understand that code and want to get an MVP knocked out for demo purposes
@@ -101,16 +132,6 @@
 # walletMaterialEncryptedEncodedFilename = apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
 # qrencode -o walletMaterialDirectory/walletMaterialEncryptedEncodedFilename walletMaterialEncryptedUuencoded
 #
-#
-# -- Set Up page layout stuff
-#  # using python image library. see http://effbot.org/imagingbook/image.htm and various other pages at the url.
-#  # this is abbreviated pseudo-code but you get the idea
-#
-# from PIL import Image # do this once
-# from PIL import ImageFont # do this once
-# from PIL import ImageDraw # do this once
-# font = ImageFont.truetype("sans-serif.ttf", 16)
-# wallet_address_string = "the address of this Ethereum Offline wallet is " + ethereumWalletAddress
 #
 #
 # -- lay out page 1: encoded wallet passx and encoded paper passx
@@ -165,18 +186,23 @@
 #
 #
 # -- securely delete everything you have not deleted yet
-# -- remove persistent items from disk
-#  # the Ethereum wallet and the passx materials are at this moment in plaintext on the disk
-#  # securely delete them from the disk
+#   # you want to do this in the background while you do the printing
+#   # this gives you a better chance of the process completing before things get turned off
 #
-# srm -r walletPassxMaterialDirectory
-# srm -r walletMaterialDirectory
-# srm -r paperPassxMaterialDirectory
+# srm -r walletPassxMaterialDirectory & 
+# srm -r walletMaterialDirectory $
+# srm -r paperPassxMaterialDirectory &
 #
 #  # note there are lots of issues with srm, wipe, etc, in journalled file sywtems and ssd volumes. so this is not a solution, it is an attempt to mitigate which may be very ineffective.
 #
 #
+# -- send the pages to the printer
+#  # the way you do this is simply to 'save' them to /dev/lpr
 #
+# page_1.save("/dev/lpr")
+# page_2.save("/dev/lpr")
+#
+#   # could it be that easy? prob not. what happens here if the print fails? do we offer any sort of recovery?
 #
 #
 #
