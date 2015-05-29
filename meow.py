@@ -15,7 +15,7 @@
 #       decode
 #                 - directory # use the specified directory as a target directory ( what is the default?)        
 #                 
-
+############################################################################################
 # proposed workflow
 #
 # meow generate 
@@ -231,11 +231,12 @@
 # Delete paperPassxMaterialEncodedPIL
 # Delete page2
 # Delete walletMaterialEncryptedEncodedPIL
-# Delete
-# Delete
 #
+####################################################################################################
+# # proposed workflow
 #
-#
+# meow decode 
+
 #
 #
 #
