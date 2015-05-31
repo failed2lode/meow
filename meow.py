@@ -82,9 +82,6 @@ if __name__ == '__main__':
 #    test_page.draw.text((x, y),"This test page is being printed to ensure your printer is working.",(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
 #    test_page.paste(walletPassxMaterialEncodedPIL, (x,y))
 #
-#    test_page.draw.text((x, y),"This is the wallet password, to use when you are using the wallet file to make transactions...",(255,255,255),font=font) # I can imagine the instructions for this need to be wordsmithed a bit?
-#    test_page.paste(walletPassxMaterialEncodedPIL, (x,y))
-#
 #    # maybe a meow footer of some kind too
 #  
 #    # print it
