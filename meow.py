@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # this is the main script for 'my Ethereum offline wallet' or meow.
 # code 2015 by failed2lode@gmail.com and hopefully others.
@@ -15,6 +15,37 @@
 #       decode
 #                 - directory # use the specified directory as a target directory ( what is the default?)        
 #                 
+
+from optparse import OptionParser
+
+
+def main_options():
+    """Handles command-line interface, arguments & options. """
+
+    usage = 'Usage: %prog {generate|decode} [OPTIONS]'
+    parser = OptionParser(usage)
+    parser.add_option('-w','--wallet', dest='wallet_dir', metavar='./WALLET',
+            default='./purrrse',
+            help='path to wallet dir; default is %default')
+
+    (options, args) = parser.parse_args()
+
+    if not len(args) == 1:
+        parser.error('Incorrect number of arguments; see --help.')
+    if args[0] not in ['generate','decode']:
+        parser.error('Incorrect action specified; use generate or decode.')
+
+
+    return (options, args)
+
+if __name__ == '__main__':
+
+    (options, args) = main_options()
+
+
+
+
+
 ############################################################################################
 # proposed workflow
 #
