@@ -52,7 +52,7 @@ def splash(message):
         print(' '+ message )
         print(  '\n\n'     )
     except Exception as e:
-        print('Error displaying into message: ' + str(e))
+        print('Error displaying message: ' + str(e))
 
 
 def print_test_page():
@@ -113,7 +113,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
     try:
-         splash("meow")
+         splash("mΞow")
          print_test_page()
         # create_memoryfs() - if we must store files, use a RAM drive.
         # generate_wallet() - is your goal to also generate the wallet in json?
