@@ -25,7 +25,7 @@ import sys
 from PIL import Image # do this once
 from PIL import ImageFont # do this once
 from PIL import ImageDraw # do this once
-print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/freeserif.ttf", 16) #may want to play with this
+print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 16) #may want to play with this; very ubuntu specific.
 
 
 
@@ -55,9 +55,9 @@ def splash(message):
     try:
         os.system('clear')
         print( '  \n    \n')
-        print( ' /\_/\  \n')
-        print( "(='.'=) \n")
-        print( ' > ^ <  \n')
+        print( ' /\_/\    ')
+        print( "(='.'=)   ")
+        print( ' > ^ <    ')
         print(' '+ message )
         print(  '\n\n'     )
     except Exception as e:
@@ -68,7 +68,7 @@ def print_test_page():
     """Print a test page."""
     
     #  Confirm Test Print Desired
-    print_test_page = raw_input('Print test page now? (Yes | No | Quit')
+    print_test_page = raw_input('Print test page now? (Yes | No | Quit): ')
        
     if print_test_page.lower[0] == 'q':
         splash('goodbye!')
