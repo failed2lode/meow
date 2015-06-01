@@ -56,7 +56,7 @@ def splash(message):
         os.system('clear')
         print( '  \n    \n')
         print( ' /\_/\  \n')
-        print( '(=º.º=) \n')
+        print( '(='.'=) \n')
         print( ' > ^ <  \n')
         print(' '+ message )
         print(  '\n\n'     )
