@@ -16,8 +16,6 @@
 #                 - directory # use the specified directory as a target directory ( what is the default?)        
 #                 
 
-from Crypto.Cipher import AES
-from hashlib import md5
 from optparse import OptionParser
 import os
 import sys
@@ -42,20 +40,6 @@ def main_options():
     return (options, args)
 
 
-def decode(wallet_dir):
-    """Decode wallet at given location."""
-
-    try:
-        if not os.path.isdir(wallet_dir):
-            raise IOError(1000,'Specified wallet is not a directory.')
-        pass
-        sys.exit(0)
-
-    except Exception as e:
-        print('Error: ' + e.strerror)
-        sys.exit(1)
-
-
 def splash():
     """Clear the screen and display information."""
 
@@ -77,12 +61,11 @@ if __name__ == '__main__':
     (options, args) = main_options()
 
     if args[0] == 'decode':
-        decode(options.wallet_dir)
         sys.exit(0)
 
     try:
         # splash()
-        print_test_page()
+        # print_test_page()
         # create_memoryfs() - if we must store files, use a RAM drive.
         # generate_wallet() - is your goal to also generate the wallet in json?
         # encrypt (article mentions 3DES, but AES may be a more modern choice).
