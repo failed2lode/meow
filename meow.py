@@ -25,7 +25,7 @@ import sys
 from PIL import Image # do this once
 from PIL import ImageFont # do this once
 from PIL import ImageDraw # do this once
-font = ImageFont.truetype("sans-serif.ttf", 16)
+font = ImageFont.truetype("sans-serif.ttf", 16) #may want to play with this
 
 
 
@@ -54,10 +54,10 @@ def splash(message):
 
     try:
         os.system('clear')
-        print(  '\n\n'     )
-        print(  '/\_/\  \n')
-        print( '(Ξº.ºΞ) \n')
-        print('  > ^ <  \n')
+        print( '  \n    \n')
+        print( ' /\_/\  \n')
+        print( '(=º.º=) \n')
+        print( ' > ^ <  \n')
         print(' '+ message )
         print(  '\n\n'     )
     except Exception as e:
@@ -110,7 +110,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
     try:
-         splash("mΞow")
+         splash(u"meow")
          print_test_page()
         # create_memoryfs() - if we must store files, use a RAM drive.
         # generate_wallet() - is your goal to also generate the wallet in json?
