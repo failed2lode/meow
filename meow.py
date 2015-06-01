@@ -25,7 +25,7 @@ import sys
 from PIL import Image # do this once
 from PIL import ImageFont # do this once
 from PIL import ImageDraw # do this once
-print_font = ImageFont.truetype("sans-serif.ttf", 16) #may want to play with this
+print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/freeserif.ttf", 16) #may want to play with this
 
 
 
