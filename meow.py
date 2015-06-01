@@ -20,6 +20,15 @@ from optparse import OptionParser
 import os
 import sys
 
+#-- Set Up page layout stuff
+#  # using python image library. see http://effbot.org/imagingbook/image.htm and various other pages at the url.
+from PIL import Image # do this once
+from PIL import ImageFont # do this once
+from PIL import ImageDraw # do this once
+font = ImageFont.truetype("sans-serif.ttf", 16)
+
+
+
 
 def main_options():
     """Handles command-line interface, arguments & options. """
@@ -58,52 +67,40 @@ def splash(message):
 def print_test_page():
     """Print a test page."""
     
-#-- Set Up page layout stuff
-#  # using python image library. see http://effbot.org/imagingbook/image.htm and various other pages at the url.
-#  # this is abbreviated pseudo-code but you get the idea
-#
- from PIL import Image # do this once
- from PIL import ImageFont # do this once
- from PIL import ImageDraw # do this once
- font = ImageFont.truetype("sans-serif.ttf", 16)
-
-
-
-#  Confirm Test Print Desired
-   print_test_page = raw_input('Print test page now? (Yes | No | Quit')
-   
-  if print_test_page.lower[0] = 'q':
-      splash('goodbye!')
-      raise Exception('Program cancelled by User')
-  elif print_test_page.lower[0] = 'n':
-      return
-  elif print_test_page.lower[0] = 'y':
-  
-  test_page_height  = 2550
-  test_page_width   = 3300
-  test_page_message = "This test page is being printed to ensure your printer is working."
-   
-  test_page = Image.new("RGB", (2550, 3300), "white")  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
+    #  Confirm Test Print Desired
+    print_test_page = raw_input('Print test page now? (Yes | No | Quit')
        
-#  we could also use a meow background image of some kind ??
-#
-#    #lay out the page
-# 
-#    # it would be fun to put a meow header image here... 
-  test_page.draw.text(((test_page_height/2)-2, (test_page_width/2)-3, ' /\_/\  \n',(255,255,255),font=font)
-  test_page.draw.text(((test_page_height/2)-1, (test_page_width/2)-3, '(Ξº.ºΞ) \n',(255,255,255),font=font)
-  test_page.draw.text(((test_page_height/2)-0, (test_page_width/2)-3, ' > ^ <  \n',(255,255,255),font=font)
-  test_page.draw.text(((test_page_height/2)-2, (test_page_width/2)-len(test_page_message)/2,), test_page_message ,(255,255,255),font=font)
-  
-   
-# -- print test page --
- test_print_success = "r"
- do while testPrintSuccess.lower[0] = 'r'
-     test_page.save("/dev/lpr")
-     test_print_success = raw_input( 'Was test print successful? (Yes | Retry | Quit)"
-     if print_test_page.lower[0] = 'q':
-        splash('goodbye!')
-        raise Exception('Program cancelled by User')
+        if print_test_page.lower[0] = 'q':
+            splash('goodbye!')
+            raise Exception('Program cancelled by User')
+        elif print_test_page.lower[0] = 'n':
+            return
+      
+    test_page_height  = 2550
+    test_page_width   = 3300
+    test_page_message = "This test page is being printed to ensure your printer is working."
+       
+      test_page = Image.new("RGB", (2550, 3300), "white")  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
+           
+    #  we could also use a meow background image of some kind ??
+    #
+    #    #lay out the page
+    # 
+    #    # it would be fun to put a meow header image here... 
+    test_page.draw.text(((test_page_height/2)-2, (test_page_width/2)-3, ' /\_/\  \n',(255,255,255),font=font)
+    test_page.draw.text(((test_page_height/2)-1, (test_page_width/2)-3, '(Ξº.ºΞ) \n',(255,255,255),font=font)
+    test_page.draw.text(((test_page_height/2)-0, (test_page_width/2)-3, ' > ^ <  \n',(255,255,255),font=font)
+    test_page.draw.text(((test_page_height/2)-2, (test_page_width/2)-len(test_page_message)/2,), test_page_message ,(255,255,255),font=font)
+    
+    
+    # -- print test page --
+    test_print_success = "r"
+    do while testPrintSuccess.lower[0] = 'r'
+        test_page.save("/dev/lpr")
+        test_print_success = raw_input( 'Was test print successful? (Yes | Retry | Quit)"
+        if print_test_page.lower[0] = 'q':
+            splash('goodbye!')
+            raise Exception('Program cancelled by User')
 
 if __name__ == '__main__':
 
