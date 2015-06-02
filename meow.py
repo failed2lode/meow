@@ -79,23 +79,22 @@ def print_test_page():
         return
     
     #generate test page    
-    print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 80) #may want to play with this; very ubuntu specific.  
+    print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 16) #may want to play with this; very ubuntu specific.  
     
-    test_page = Image.new("RGB", (2550, 600), 'white')  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
+    test_page = Image.new("RGB", (850, 1100), 'white')  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
     test_page_message = "This test page is being printed to ensure your printer is working purrfectly."
                
     #    lay out the page   
     draw = ImageDraw.Draw(test_page)
-    draw.text((10,  10), ' /\_/\  ',(0,0,0),font=print_font)
-    draw.text((10, 100), "(='.'=) meow test page",(0,0,0),font=print_font)
-    draw.text((10, 200), ' > ^ <  ',(0,0,0),font=print_font)
-    draw.text((10, 300), test_page_message ,(0,0,0),font=print_font)
+    draw.text((10, 110), ' /\_/\  ',(0,0,0),font=print_font)
+    draw.text((10, 124), "(='.'=) meow test page",(0,0,0),font=print_font)
+    draw.text((10, 138), ' > ^ <  ',(0,0,0),font=print_font)
+    draw.text((10, 144), test_page_message ,(0,0,0),font=print_font)
     draw = ImageDraw.Draw(test_page)
     
     test_page.save('test_page.jpg', 'JPEG')
     test_page.save('test_page.png', 'PNG')
     test_page.save('test_page.bmp', 'BMP')
-    
         
     test_print_success = "placeholder"
     while not test_print_success.lower()[0] in ('y', 'r', 'q'):
@@ -103,15 +102,15 @@ def print_test_page():
         try:
     
             # generate the page
-            output = StringIO.StringIO()
             lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
-            
+            output = StringIO.StringIO()
             format = 'PNG' # or 'JPEG' or whatever you want
-            test_page.save(output, format)
-
             
-            lpr.stdin.write(output.getvalue())
+            test_page.save(output, format)
+            lpr.communicate(output.getvalue())
+                        
             output.close()
+            lpr.terminate()
             
             test_print_success = raw_input( 'Was test print successful? (Yes | Retry | Quit)')
             if test_print_success.lower()[0] == 'q':
