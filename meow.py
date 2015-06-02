@@ -107,7 +107,7 @@ def print_test_page():
             format = 'PNG' # or 'JPEG' or whatever you want
             
             test_page.save(output, format)
-            lpr.communicate(output.getvalue())
+            lpr.communicate(output.read())
                         
             output.close()
             lpr.terminate()
