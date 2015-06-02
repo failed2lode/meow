@@ -89,45 +89,43 @@ def print_test_page():
     # 
     #    # it would be fun to put a meow header image here... 
     
-    try:
-        draw.text(((test_page_height/2)-2, (test_page_width/2)-3), ' /\_/\  ',(255,255,255),font=print_font)
-        draw.text(((test_page_height/2)-1, (test_page_width/2)-3), "(='.'=) meow test page",(255,255,255),font=print_font)
-        draw.text(((test_page_height/2)-0, (test_page_width/2)-3), ' > ^ <  ',(255,255,255),font=print_font)
-        draw.text(((test_page_height/2)+1, (test_page_width/2)-len(test_page_message)/2), test_page_message ,(255,255,255),font=print_font)
-        
    
-        # generate the page to a string in a variable
-        import StringIO
-        output = StringIO.StringIO()
-        format = 'PNG' # or 'JPEG' or whatever you want
-        test_page.save(output, format)
-        test_page_content = output.getvalue()
-        output.close()
-        # print test_page_content #debugging step
-    except Exception as e:
-        print('Error in test page layout:' + str(e))
-   
-    # try to print the page
-       
+    draw.text(((test_page_height/2)-2, (test_page_width/2)-3), ' /\_/\  ',(255,255,255),font=print_font)
+    draw.text(((test_page_height/2)-1, (test_page_width/2)-3), "(='.'=) meow test page",(255,255,255),font=print_font)
+    draw.text(((test_page_height/2)-0, (test_page_width/2)-3), ' > ^ <  ',(255,255,255),font=print_font)
+    draw.text(((test_page_height/2)+1, (test_page_width/2)-len(test_page_message)/2), test_page_message ,(255,255,255),font=print_font)
+    
     test_print_success = "placeholder"
+    
+    import StringIO
+    import subprocess      
+    
     while not test_print_success.lower()[0] in ('y', 'r', 'q'):
 
         try:
     
-            import subprocess
+            # generate the page
+            output = StringIO.StringIO()
             lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
-            lpr.stdin.write(test_page_content)
+            
+            format = 'PNG' # or 'JPEG' or whatever you want
+            test_page.save(output, format)
+            
+            lpr.stdin.write(output.getvalue())
+            output.close()
+            
             test_print_success = raw_input( 'Was test print successful? (Yes | Retry | Quit)')
             if test_print_success.lower()[0] == 'q':
                 splash('goodbye!')
                 raise Exception('Program cancelled by User')
             elif test_print_success.lower()[0] == 'y':
                 return
-        
+            elif test_print_success.lower()[0] == 'r':
+                test_print_success = "placeholder"
+                    
         except Exception as e:
             print('Error attempting to print:' + str(e)) 
             pass
-
     
 if __name__ == '__main__':
 
