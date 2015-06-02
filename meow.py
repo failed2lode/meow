@@ -25,7 +25,8 @@ import sys
 from PIL import Image # do this once
 from PIL import ImageFont # do this once
 from PIL import ImageDraw # do this once
-
+import StringIO
+import subprocess  
 
 
 
@@ -76,30 +77,27 @@ def print_test_page():
         raise Exception('Program cancelled by User')
     elif print_test_page_menu.lower()[0] == 'n':
         return
-      
-    test_page_height  = 2550
-    test_page_width   = 3300
-    print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 16) #may want to play with this; very ubuntu specific.  
-    test_page = Image.new("RGB", (2550, 3300), "white")  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
+    
+    #generate test page    
+    print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 80) #may want to play with this; very ubuntu specific.  
+    
+    test_page = Image.new("RGB", (2550, 600), 'white')  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
+    test_page_message = "This test page is being printed to ensure your printer is working purrfectly."
+               
+    #    lay out the page   
+    draw = ImageDraw.Draw(test_page)
+    draw.text((10,  10), ' /\_/\  ',(0,0,0),font=print_font)
+    draw.text((10, 100), "(='.'=) meow test page",(0,0,0),font=print_font)
+    draw.text((10, 200), ' > ^ <  ',(0,0,0),font=print_font)
+    draw.text((10, 300), test_page_message ,(0,0,0),font=print_font)
     draw = ImageDraw.Draw(test_page)
     
-    test_page_message = "This test page is being printed to ensure your printer is working."
-               
-    #    lay out the page
-    # 
-    #    # it would be fun to put a meow header image here... 
+    test_page.save('test_page.jpg', 'JPEG')
+    test_page.save('test_page.png', 'PNG')
+    test_page.save('test_page.bmp', 'BMP')
     
-   
-    draw.text(((test_page_height/2)-2, (test_page_width/2)-3), ' /\_/\  ',(255,255,255),font=print_font)
-    draw.text(((test_page_height/2)-1, (test_page_width/2)-3), "(='.'=) meow test page",(255,255,255),font=print_font)
-    draw.text(((test_page_height/2)-0, (test_page_width/2)-3), ' > ^ <  ',(255,255,255),font=print_font)
-    draw.text(((test_page_height/2)+1, (test_page_width/2)-len(test_page_message)/2), test_page_message ,(255,255,255),font=print_font)
-    
+        
     test_print_success = "placeholder"
-    
-    import StringIO
-    import subprocess      
-    
     while not test_print_success.lower()[0] in ('y', 'r', 'q'):
 
         try:
@@ -110,6 +108,7 @@ def print_test_page():
             
             format = 'PNG' # or 'JPEG' or whatever you want
             test_page.save(output, format)
+
             
             lpr.stdin.write(output.getvalue())
             output.close()
