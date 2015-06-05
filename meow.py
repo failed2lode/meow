@@ -86,31 +86,31 @@ def print_test_page():
                
     #    lay out the page   
     draw = ImageDraw.Draw(test_page)
-    draw.text((10, 110), ' /\_/\  ',(0,0,0),font=print_font)
-    draw.text((10, 124), "(='.'=) meow test page",(0,0,0),font=print_font)
-    draw.text((10, 138), ' > ^ <  ',(0,0,0),font=print_font)
-    draw.text((10, 144), test_page_message ,(0,0,0),font=print_font)
+    draw.text((425, 610), ' /\_/\  ',(0,0,0),font=print_font)
+    draw.text((425, 624), "(='.'=) meow test page",(0,0,0),font=print_font)
+    draw.text((425, 640), ' > ^ <  ',(0,0,0),font=print_font)
+    draw.text((425, 646), test_page_message ,(0,0,0),font=print_font)
     draw = ImageDraw.Draw(test_page)
     
-    test_page.save('test_page.jpg', 'JPEG')
-    test_page.save('test_page.png', 'PNG')
-    test_page.save('test_page.bmp', 'BMP')
+    # uncomment these if you want a separate on-disk file of some sort. note we are not setting local directory here
+    #test_page.save('test_page.jpg', 'JPEG')
+    #test_page.save('test_page.png', 'PNG')
+    #test_page.save('test_page.bmp', 'BMP')
         
-    test_print_success = "placeholder"
+    test_print_success = "/"
     while not test_print_success.lower()[0] in ('y', 'r', 'q'):
 
         try:
-    
+                
             # generate the page
-            lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
+            lpr =  subprocess.Popen(["/usr/bin/lpr", '-E'], stdin=subprocess.PIPE)
             output = StringIO.StringIO()
             format = 'PNG' # or 'JPEG' or whatever you want
             
             test_page.save(output, format)
-            lpr.communicate(output.read())
+            lpr.communicate(output.getvalue())
                         
-            output.close()
-            lpr.terminate()
+            output.close() # what happens when this is here?
             
             test_print_success = raw_input( 'Was test print successful? (Yes | Retry | Quit)')
             if test_print_success.lower()[0] == 'q':
@@ -119,7 +119,7 @@ def print_test_page():
             elif test_print_success.lower()[0] == 'y':
                 return
             elif test_print_success.lower()[0] == 'r':
-                test_print_success = "placeholder"
+                test_print_success = "/"
                     
         except Exception as e:
             print('Error attempting to print:' + str(e)) 
