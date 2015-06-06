@@ -2,13 +2,13 @@
 #
 # Wrapper to aid in the secure generation of stuff.
 #
-# Creates a tempfs where sensitive content can reside in memory-based file
+# Creates a ramfs where sensitive content can reside in memory-based file
 # system. This script requires user to have sudo privileges. Elevated
-# privileges are only necessary for mounting & unmounting the tempfs in 
+# privileges are only necessary for mounting & unmounting the ramfs in
 # addition to wiping all file content generated.
 #
-# 
-# $ sudo mount -t tmpfs tmpfs ./purrrse
+#
+# $ sudo mount -t ramfs ramfs ./purrrse
 # $ ./meow.py generate -w ./purrrse
 # $ for f in $(find ./purrrse -type f); do \
 #   sudo dd if=/dev/zero of=$f bs=1 count=$(wc -c $f | awk '{print $1}'); \
@@ -19,10 +19,10 @@
 import os
 import subprocess
 
-print('Mount tmpfs ./purrrse...')
+print('Mount ramfs ./purrrse...')
 if not os.path.isdir('./purrrse'):
     os.mkdir('./purrrse')
-subprocess.call(['sudo', 'mount', '-t', 'tmpfs', 'tmpfs', './purrrse'])
+subprocess.call(['sudo', 'mount', '-t', 'ramfs', 'ramfs', './purrrse'])
 
 print('Running meow...')
 # TODO: Pass additional args onto this call to meow.py (e.g. --no-test-print)
@@ -38,6 +38,6 @@ subprocess.call("for f in $(find ./purrrse -type f); " + \
         "do sudo dd if=/dev/urandom of=$f bs=1 " + \
         "count=$(wc -c $f | awk '{print $1}'); done", shell=True)
 
-print('Unmount tmpfs ./purrrse...')
+print('Unmount ramfs ./purrrse...')
 subprocess.call(['sudo', 'umount', './purrrse'])
 os.rmdir('./purrrse')
