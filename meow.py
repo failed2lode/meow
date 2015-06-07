@@ -139,10 +139,18 @@ def secure_wallet(wallet):
     wallet_aes = wallet + '.aes'
     wallet_b64 = wallet_aes + ".b64"
     with open(wallet, 'rb') as fin, open(wallet_aes, 'wb') as fout:
-        encrypt(fin, fout, '<super-secret-password>')
+        encrypt(fin, fout, '<super-secret-password>', key_length=16)
 
     with open(wallet_aes, 'rb') as fin, open(wallet_b64, 'wb') as fout:
         base64.encode(fin, fout)
+
+
+def qr_encode_wallet(wallet):
+    import pyqrcode
+    qr = None
+    with open(wallet, 'r') as fin:
+        qr = pyqrcode.create(fin.read(), version=40, error='M')
+        qr.png("wallet.png")
 
 
 if __name__ == '__main__':
@@ -158,7 +166,7 @@ if __name__ == '__main__':
         # create_memoryfs() - if we must store files, use a RAM drive.
         # generate_wallet() - is your goal to also generate the wallet in json?
         secure_wallet('./wallet')
-        # encode() to printable characters if not part of encrypt().
+        qr_encode_wallet('./wallet.aes.b64')
         sys.exit(0)
     except Exception as e:
         print('Error in __main__():' + str(e))
