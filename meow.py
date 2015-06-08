@@ -16,6 +16,7 @@
 #                 - directory # use the specified directory as a target directory ( what is the default?)        
 #                 
 
+import base64
 from optparse import OptionParser
 import os
 import sys
@@ -28,6 +29,7 @@ from PIL import ImageDraw # do this once
 import StringIO
 import subprocess  
 
+from encryption import encrypt, decrypt
 
 
 def main_options():
@@ -125,6 +127,32 @@ def print_test_page():
             print('Error attempting to print:' + str(e)) 
             pass
     
+
+def secure_wallet(wallet):
+    """Encrypt and encode the wallet.
+
+    Pass path to wallet file, not directory. Compatible with openssl, use
+    $ openssl enc -base64 -d -in ./wallet.aes.b64 -out ./wallet.aes | \
+        openssl aes-256-cbc -d -in wallet.aes -out ./wallet.dec
+    to decode / decrypt."""
+
+    wallet_aes = wallet + '.aes'
+    wallet_b64 = wallet_aes + ".b64"
+    with open(wallet, 'rb') as fin, open(wallet_aes, 'wb') as fout:
+        encrypt(fin, fout, '<super-secret-password>', key_length=16)
+
+    with open(wallet_aes, 'rb') as fin, open(wallet_b64, 'wb') as fout:
+        base64.encode(fin, fout)
+
+
+def qr_encode_wallet(wallet):
+    import pyqrcode
+    qr = None
+    with open(wallet, 'r') as fin:
+        qr = pyqrcode.create(fin.read(), version=40, error='M')
+        qr.png("wallet.png")
+
+
 if __name__ == '__main__':
 
     (options, args) = main_options()
@@ -137,8 +165,8 @@ if __name__ == '__main__':
         print_test_page()
         # create_memoryfs() - if we must store files, use a RAM drive.
         # generate_wallet() - is your goal to also generate the wallet in json?
-        # encrypt (article mentions 3DES, but AES may be a more modern choice).
-        # encode() to printable characters if not part of encrypt().
+        secure_wallet('./wallet')
+        qr_encode_wallet('./wallet.aes.b64')
         sys.exit(0)
     except Exception as e:
         print('Error in __main__():' + str(e))
