@@ -128,6 +128,35 @@ def print_test_page():
             pass
     
 
+def test_geth():
+    """ test the system for the presence of geth. 
+    geth is necessary in this iteration of code for wallet generation
+    if geth is not present, fail with instructions 
+    using subprocess.check.output from https://docs.python.org/2/library/subprocess.html
+    """
+
+    try:
+        
+        subprocess.check_output(["which", "geth"])
+
+    except Exception as e:
+        
+        splash("Geth is not present on this system. Please install it and try again")
+
+def create_tempdir():
+    import tempfile
+
+    try:
+        
+        working_directory_name = tempfile.mkdtemp()
+        #print "working directory name is" + working_directory_name[1] # here if you need it for debugging. its a tuple with handle and text, so if the print fails check your type.
+        return working_directory_name
+
+    except Exception as e:
+        splash("uh oh")
+        print e
+
+
 def secure_wallet(wallet):
     """Encrypt and encode the wallet.
 
@@ -198,7 +227,7 @@ def qr_encode_material(material):
                         
             except Exception as e:
                 print('Error attempting to print:' + str(e)) 
-                pass
+                #pass I don't know if this should be here or not.
             
 
 if __name__ == '__main__':
@@ -211,12 +240,14 @@ if __name__ == '__main__':
     try:
         splash(u"meow")
         print_test_page()
-        # test_geth() - make sure geth is presnt in the system
-        # create_tempdir() - if we must store files, use a somewhat secure temp directory.
-        # generate_wallet_password() - generate a strong password for the wallet and print out a QR code for it
+        test_geth()                #- make sure geth is present in the system. die with directions if not.
+        working_directory_name = create_tempdir() #if we must store files, use a somewhat secure temp directory.
+        # generate_wallet_password() - generate a strong password for the wallet
         # generate_wallet() - using geth command line, generate a wallet
         # generate_paper_password() - generate a password to encrypt the wallet with and print a qr code of it
         secure_wallet('./wallet') # encrypt the wallet using the paper password
+        #qr_encode_material(wallet_password) # qr_encode and print the wallet password
+        #qr_encode_material(paper_password) # qrencode and print the paper password
         qr_encode_material('./wallet.aes.b64') # qr encode the encyrpted wallet and print the QR code
         sys.exit(0)
     except Exception as e:
@@ -224,6 +255,9 @@ if __name__ == '__main__':
         pass
     finally:
         # Destroy all work material unconditionally.
+        # Clean up the working directory created in create_tempdir()yourself
+        os.removedirs(working_directory_name)
+
         pass
 
 ############################################################################################
