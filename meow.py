@@ -211,10 +211,13 @@ if __name__ == '__main__':
     try:
         splash(u"meow")
         print_test_page()
-        # create_memoryfs() - if we must store files, use a RAM drive.
-        # generate_wallet() - is your goal to also generate the wallet in json?
-        secure_wallet('./wallet')
-        qr_encode_material('./wallet.aes.b64')
+        # test_geth() - make sure geth is presnt in the system
+        # create_tempdir() - if we must store files, use a somewhat secure temp directory.
+        # generate_wallet_password() - generate a strong password for the wallet and print out a QR code for it
+        # generate_wallet() - using geth command line, generate a wallet
+        # generate_paper_password() - generate a password to encrypt the wallet with and print a qr code of it
+        secure_wallet('./wallet') # encrypt the wallet using the paper password
+        qr_encode_material('./wallet.aes.b64') # qr encode the encyrpted wallet and print the QR code
         sys.exit(0)
     except Exception as e:
         print('Error in __main__():' + str(e))
