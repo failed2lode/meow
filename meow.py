@@ -145,13 +145,61 @@ def secure_wallet(wallet):
         base64.encode(fin, fout)
 
 
-def qr_encode_wallet(wallet):
+def qr_encode_material(material):
     import pyqrcode
     qr = None
-    with open(wallet, 'r') as fin:
+    with open(material, 'r') as fin:
         qr = pyqrcode.create(fin.read(), version=40, error='M')
-        qr.png("wallet.png")
+        # qr.png("wallet.png") # this will write the qrcode to the disk. only uncomment if you want that
 
+        #generate page    
+        print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 16) #may want to play with this; very ubuntu specific.  
+        
+        qr_page = Image.new("RGB", (850, 1100), 'white')  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
+        qr_page_message = "this is item x: the [item] that is used to [do something]"
+                   
+        #    lay out the page   
+        draw = ImageDraw.Draw(qr_page)
+        draw.text((10 ,10), ' /\_/\  ',(0,0,0),font=print_font)
+        draw.text((10 ,24), "(='.'=) meow offline material for wallet [wallet ID placeholder]",(0,0,0),font=print_font)
+        draw.text((10,40), ' > ^ <  ',(0,0,0),font=print_font)
+        draw.text((10,46), test_page_message ,(0,0,0),font=print_font)
+        
+        qr.paste(qr_page, (10, 50))
+        
+        # uncomment these if you want a separate on-disk file of some sort. note we are not setting local directory here
+        #test_page.save('test_page.jpg', 'JPEG')
+        #test_page.save('test_page.png', 'PNG')
+        #test_page.save('test_page.bmp', 'BMP')
+            
+        qr_print_success = "/"
+        while not qr_print_success.lower()[0] in ('y', 'r', 'q'):
+    
+            try:
+                    
+                # generate the page
+                lpr =  subprocess.Popen(["/usr/bin/lpr", '-E'], stdin=subprocess.PIPE)
+                output = StringIO.StringIO()
+                format = 'PNG' # or 'JPEG' or whatever you want
+                
+                qr_page.save(output, format)
+                lpr.communicate(output.getvalue())
+                            
+                output.close() # what happens when this is here?
+                
+                qr_print_success = raw_input( 'Did the [item] print for wallet [wallet] successfully? (Yes | Retry | Quit)')
+                if qr_print_success.lower()[0] == 'q':
+                    splash('goodbye!')
+                    raise Exception('Program cancelled by User')
+                elif qr_print_success.lower()[0] == 'y':
+                    return
+                elif qr_print_success.lower()[0] == 'r':
+                    qr_print_success = "/"
+                        
+            except Exception as e:
+                print('Error attempting to print:' + str(e)) 
+                pass
+            
 
 if __name__ == '__main__':
 
@@ -166,7 +214,7 @@ if __name__ == '__main__':
         # create_memoryfs() - if we must store files, use a RAM drive.
         # generate_wallet() - is your goal to also generate the wallet in json?
         secure_wallet('./wallet')
-        qr_encode_wallet('./wallet.aes.b64')
+        qr_encode_material('./wallet.aes.b64')
         sys.exit(0)
     except Exception as e:
         print('Error in __main__():' + str(e))
