@@ -156,6 +156,37 @@ def create_tempdir():
         splash("uh oh")
         print e
 
+def generate_wallet_password();
+    """ generate a strong password for the wallet.
+    # use apg to generate strong password material. see http://linux.die.net/man/1/apg for man page. 
+    # walletPassx needs to be saved to a file for use by geth in non-interactive mode. This sucks.
+    # do not make it worse by naming it something obvious
+    # walletPassxMaterialFilename = apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
+    # apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > walletPassxMaterialDirectory/walletPassxMaterialFilename # generates a 16 digit strong password. Comments welcome on these settings
+    # using subprocess.check.output from https://docs.python.org/2/library/subprocess.html to run the commands.
+    """
+     
+    try: 
+        # generate walletPassxMaterialFilename = apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
+        walletPassxMaterialFilename = subprocess.check_output(["apg", "-a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q"])
+    
+        
+        # generate pull path file name of walletPassxMaterial file
+        fullPathWorkingDirectory = working_directory_name[1] #its a tuple with handle and text, so if this fails check your type.
+        fullPathWalletPassxMaterialFilename = fullPathWorkingDirectory + "/" + walletPassxMaterialFilename
+        
+        # generate walletPassxMAterial apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > working_directory_name/walletPassxMaterialFilename # generates a 16 digit strong password. Comments welcome on these settings
+        args = "-a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > " + fullPathWalletPassxMaterialFilename
+        subprocess.check_output(["apg", args])
+    
+        return fullPathWalletPassxMaterialFilename
+        
+
+    except Exception as e:
+        splash("uh oh")
+        print e
+       
+        
 
 def secure_wallet(wallet):
     """Encrypt and encode the wallet.
@@ -240,9 +271,9 @@ if __name__ == '__main__':
     try:
         splash(u"meow")
         print_test_page()
-        test_geth()                #- make sure geth is present in the system. die with directions if not.
-        working_directory_name = create_tempdir() #if we must store files, use a somewhat secure temp directory.
-        # generate_wallet_password() - generate a strong password for the wallet
+        test_geth()                                     #- make sure geth is present in the system. die with directions if not.
+        working_directory_name = create_tempdir()       #if we must store files, use a somewhat secure temp directory.
+        wallet_password_file = generate_wallet_password()    # generate a strong password for the wallet
         # generate_wallet() - using geth command line, generate a wallet
         # generate_paper_password() - generate a password to encrypt the wallet with and print a qr code of it
         secure_wallet('./wallet') # encrypt the wallet using the paper password
@@ -255,8 +286,8 @@ if __name__ == '__main__':
         pass
     finally:
         # Destroy all work material unconditionally.
-        # Clean up the working directory created in create_tempdir()yourself
-        os.removedirs(working_directory_name)
+        os.removedirs(working_directory_name)           # Clean up the working directory created in create_tempdir()yourself
+        
 
         pass
 
