@@ -143,20 +143,8 @@ def test_geth():
         
         splash("Geth is not present on this system. Please install it and try again")
 
-def create_tempdir():
-    import tempfile
 
-    try:
-        
-        working_directory_name = tempfile.mkdtemp()
-        #print "working directory name is" + working_directory_name[1] # here if you need it for debugging. its a tuple with handle and text, so if the print fails check your type.
-        return working_directory_name
-
-    except Exception as e:
-        splash("uh oh")
-        print e
-
-def generate_wallet_password();
+def generate_wallet_password(wallet_password_filename):
     """ generate a strong password for the wallet.
     # use apg to generate strong password material. see http://linux.die.net/man/1/apg for man page. 
     # walletPassx needs to be saved to a file for use by geth in non-interactive mode. This sucks.
@@ -167,28 +155,58 @@ def generate_wallet_password();
     """
      
     try: 
-        # generate walletPassxMaterialFilename = apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
-        walletPassxMaterialFilename = subprocess.check_output(["apg", "-a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q"])
-    
         
-        # generate pull path file name of walletPassxMaterial file
-        fullPathWorkingDirectory = working_directory_name[1] #its a tuple with handle and text, so if this fails check your type.
-        fullPathWalletPassxMaterialFilename = fullPathWorkingDirectory + "/" + walletPassxMaterialFilename
-        
-        # generate walletPassxMAterial apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > working_directory_name/walletPassxMaterialFilename # generates a 16 digit strong password. Comments welcome on these settings
-        args = "-a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > " + fullPathWalletPassxMaterialFilename
-        subprocess.check_output(["apg", args])
-    
-        return fullPathWalletPassxMaterialFilename
-        
+        args = "-a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > " + wallet_password_filename
+        subprocess.check_output(["apg", args)    
 
     except Exception as e:
         splash("uh oh")
-        print e
+        print "wallet password generation failed with error: " + e
        
-        
+   
+def generate_wallet( working_directory_name, wallet_password_filename):   
+    """ generate geth wallet material using geth on the command line 
+     ethereumWalletAddress = geth --datadir WalletMaterialDirectory --password WalletPassxMaterialDirectory/WalletPassxMaterialFilename account new
+     returns:   Address: b0047c606f3af7392e073ed13253f8f4710b08b6
+    """     
+    
+    try: 
+    args = "--datadir " + working_directory_name + " --password " + wallet_password_filename + "  account new"
+    wallet_material_name = subprocess.check_output(["geth", args)    
+    return wallet_material_name
 
-def secure_wallet(wallet):
+    except Exception as e:
+        splash("uh oh")
+        print "wallet generation failed with error: " + e
+
+      
+def generate_paper_password(paper_password_filename):
+    """ generate a strong password for the wallet.
+    # use apg to generate strong password material. see http://linux.die.net/man/1/apg for man page. 
+    # walletPassx needs to be saved to a file for use by geth in non-interactive mode. This sucks.
+    # do not make it worse by naming it something obvious
+    # walletPassxMaterialFilename = apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q # generates a 16 digit strong filename. check the -M setting to make sure the character set is appropriate
+    # apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > walletPassxMaterialDirectory/walletPassxMaterialFilename # generates a 16 digit strong password. Comments welcome on these settings
+    # using subprocess.check.output from https://docs.python.org/2/library/subprocess.html to run the commands.
+    """
+     
+    try: 
+        
+        args = "-a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > " + paper_password_filename 
+        subprocess.check_output(["apg", args) # puts the password into the file
+        
+        #get it into a variable so you can return it. there must be a better way?
+        args = paper_password_filename
+        paper_password = subprocess.check_output(["cat", args)
+                
+        return paper_password   
+
+    except Exception as e:
+        splash("uh oh")
+        print "wallet password generation failed with error: " + e
+
+
+def secure_wallet(full_wallet_material_name, paper_password):
     """Encrypt and encode the wallet.
 
     Pass path to wallet file, not directory. Compatible with openssl, use
@@ -196,16 +214,19 @@ def secure_wallet(wallet):
         openssl aes-256-cbc -d -in wallet.aes -out ./wallet.dec
     to decode / decrypt."""
 
-    wallet_aes = wallet + '.aes'
+    wallet_aes = full_wallet_material_name + '.aes'
     wallet_b64 = wallet_aes + ".b64"
-    with open(wallet, 'rb') as fin, open(wallet_aes, 'wb') as fout:
-        encrypt(fin, fout, '<super-secret-password>', key_length=16)
+    with open(full_wallet_material_name, 'rb') as fin, open(wallet_aes, 'wb') as fout:
+        encrypt(fin, fout, paper_password, key_length=16)
 
     with open(wallet_aes, 'rb') as fin, open(wallet_b64, 'wb') as fout:
         base64.encode(fin, fout)
+    
+    # return full encrypted wallet material name
+    return wallet_b64
+    
 
-
-def qr_encode_material(material):
+def qr_encode_material(material, wallet_address):
     import pyqrcode
     qr = None
     with open(material, 'r') as fin:
@@ -221,7 +242,7 @@ def qr_encode_material(material):
         #    lay out the page   
         draw = ImageDraw.Draw(qr_page)
         draw.text((10 ,10), ' /\_/\  ',(0,0,0),font=print_font)
-        draw.text((10 ,24), "(='.'=) meow offline material for wallet [wallet ID placeholder]",(0,0,0),font=print_font)
+        draw.text((10 ,24), "(='.'=) meow offline material for wallet" + wallet_addresss ,(0,0,0),font=print_font)
         draw.text((10,40), ' > ^ <  ',(0,0,0),font=print_font)
         draw.text((10,46), test_page_message ,(0,0,0),font=print_font)
         
@@ -247,7 +268,7 @@ def qr_encode_material(material):
                             
                 output.close() # what happens when this is here?
                 
-                qr_print_success = raw_input( 'Did the [item] print for wallet [wallet] successfully? (Yes | Retry | Quit)')
+                qr_print_success = raw_input( 'Did the [item] print for wallet ' + wallet_address + ' successfully? (Yes | Retry | Quit)')
                 if qr_print_success.lower()[0] == 'q':
                     splash('goodbye!')
                     raise Exception('Program cancelled by User')
@@ -269,27 +290,45 @@ if __name__ == '__main__':
         sys.exit(0)
 
     try:
+        # test things
         splash(u"meow")
         print_test_page()
-        test_geth()                                     #- make sure geth is present in the system. die with directions if not.
-        working_directory_name = create_tempdir()       #if we must store files, use a somewhat secure temp directory.
-        wallet_password_file = generate_wallet_password()    # generate a strong password for the wallet
-        # generate_wallet() - using geth command line, generate a wallet
-        # generate_paper_password() - generate a password to encrypt the wallet with and print a qr code of it
-        secure_wallet('./wallet') # encrypt the wallet using the paper password
-        #qr_encode_material(wallet_password) # qr_encode and print the wallet password
-        #qr_encode_material(paper_password) # qrencode and print the paper password
-        qr_encode_material('./wallet.aes.b64') # qr encode the encyrpted wallet and print the QR code
+        test_geth()                                                           #- make sure geth is present in the system. die with directions if not.
+
+        # generate materials
+        working_directory_handle, working_directory_name = tempfile.mkdtemp() # generate temp directory to hold wallet. if we must store files, use a somewhat secure temp directory. Note we want to eliminate all this in v2 by eliminating geth entirely
+        wallet_password_handle, wallet_password_filename = tempfile.mkstemp() # genrate temp file to hold wallet password. if we must store passwords on disk, use a somewhat secure filename
+        paper_password_handle, paper_password_filename = tempfile.mkstemp()   # generate temp file for paper password. needed as qrencode funciton in this version wants an input file  
+             
+        generate_wallet_password( wallet_password_filename )                  # generate a strong password for the wallet, place it in the file created above
+        wallet_material_name = generate_wallet( working_directory_name, wallet_password_filename )   # using geth command line, generate a wallet
+        full_wallet_material_name = working_directory_name + wallet_material_name[-40:] + ".json"
+   
+        
+        #encrypt things
+        paper_password = generate_paper_password( paper_password_filename )   # generate a password to encrypt the wallet
+        encrypted_wallet_filename = secure_wallet(full_wallet_material_name, paper_password)              # encrypt the wallet using the paper password
+        
+        # qr encode things and print all the materials
+        qr_encode_material( wallet_password_filename, wallet_material_name )  # qr_encode and print the wallet password
+        qr_encode_material( paper_password_filename, wallet_material_name )   # qrencode and print the paper password
+        qr_encode_material( encrypted_wallet_filename, wallet_material_name ) # qr encode the encyrpted wallet and print the QR code
         sys.exit(0)
+        
     except Exception as e:
         print('Error in __main__():' + str(e))
         pass
+        
     finally:
         # Destroy all work material unconditionally.
+        # per here: https://www.logilab.org/blogentry/17873, close the file handles properly please
+        
+        os.close(wallet_password_handle)
+        os_close(paper_password_handle)
         os.removedirs(working_directory_name)           # Clean up the working directory created in create_tempdir()yourself
         
 
-        pass
+       
 
 ############################################################################################
 # proposed workflow
