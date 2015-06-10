@@ -226,7 +226,7 @@ def secure_wallet(full_wallet_material_name, paper_password):
     return wallet_b64
     
 
-def qr_encode_material(material, wallet_address):
+def qr_encode_material(material, wallet_address, qr_page_message):
     import pyqrcode
     qr = None
     with open(material, 'r') as fin:
@@ -237,14 +237,13 @@ def qr_encode_material(material, wallet_address):
         print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 16) #may want to play with this; very ubuntu specific.  
         
         qr_page = Image.new("RGB", (850, 1100), 'white')  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
-        qr_page_message = "this is item x: the [item] that is used to [do something]"
-                   
+            
         #    lay out the page   
         draw = ImageDraw.Draw(qr_page)
         draw.text((10 ,10), ' /\_/\  ',(0,0,0),font=print_font)
         draw.text((10 ,24), "(='.'=) meow offline material for wallet" + wallet_addresss ,(0,0,0),font=print_font)
         draw.text((10,40), ' > ^ <  ',(0,0,0),font=print_font)
-        draw.text((10,46), test_page_message ,(0,0,0),font=print_font)
+        draw.text((10,46), qr_page_message ,(0,0,0),font=print_font)
         
         qr.paste(qr_page, (10, 50))
         
@@ -310,9 +309,14 @@ if __name__ == '__main__':
         encrypted_wallet_filename = secure_wallet(full_wallet_material_name, paper_password)              # encrypt the wallet using the paper password
         
         # qr encode things and print all the materials
-        qr_encode_material( wallet_password_filename, wallet_material_name )  # qr_encode and print the wallet password
-        qr_encode_material( paper_password_filename, wallet_material_name )   # qrencode and print the paper password
-        qr_encode_material( encrypted_wallet_filename, wallet_material_name ) # qr encode the encyrpted wallet and print the QR code
+        qr_page_message = "this is the account password for the Ethereum wallet. Use it to unlock the wallet when using the wallet."
+        qr_encode_material( wallet_password_filename, wallet_material_name, qr_page_message )  # qr_encode and print the wallet password
+        
+        qr_page_message = "this is the paper password used to encrypt the Ethereum. Use it to decrypt the wallet when decoding the Wallet QR Code."
+        qr_encode_material( paper_password_filename, wallet_material_name, qr_page_message )   # qrencode and print the paper password
+        
+        qr_page_message = "this is the encrypted Etereum Wallet. Read it using a QR reader, decrypt it using the paper password, and unlock it using the account password"
+        qr_encode_material( encrypted_wallet_filename, wallet_material_name, qr_page_message ) # qr encode the encyrpted wallet and print the QR code
         sys.exit(0)
         
     except Exception as e:
