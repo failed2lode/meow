@@ -20,6 +20,7 @@ import base64
 from optparse import OptionParser
 import os
 import sys
+import tempfile
 
 #-- Set Up page layout stuff
 #  # using python image library. see http://effbot.org/imagingbook/image.htm and various other pages at the url.
@@ -137,12 +138,17 @@ def test_geth():
 
     try:
         
-        subprocess.check_output(["which", "geth"])
-
+        geth_present = subprocess.call("type geth", shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
+        if geth_present:
+            print "geth is present in this system"
+          
+        else:
+            splash("geth is not present in this system. can't continue without it. please install geth and try again")
+            raise Exception('required software not present in system')
+            
     except Exception as e:
         
-        splash("Geth is not present on this system. Please install it and try again")
-
+        print e
 
 def generate_wallet_password(wallet_password_filename):
     """ generate a strong password for the wallet.
@@ -157,7 +163,7 @@ def generate_wallet_password(wallet_password_filename):
     try: 
         
         args = "-a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > " + wallet_password_filename
-        subprocess.check_output(["apg", args)    
+        subprocess.check_output(["apg", args])    
 
     except Exception as e:
         splash("uh oh")
@@ -171,9 +177,9 @@ def generate_wallet( working_directory_name, wallet_password_filename):
     """     
     
     try: 
-    args = "--datadir " + working_directory_name + " --password " + wallet_password_filename + "  account new"
-    wallet_material_name = subprocess.check_output(["geth", args)    
-    return wallet_material_name
+        args = "--datadir " + working_directory_name + " --password " + wallet_password_filename + "  account new"
+        wallet_material_name = subprocess.check_output(["geth", args])    
+        return wallet_material_name
 
     except Exception as e:
         splash("uh oh")
@@ -193,11 +199,11 @@ def generate_paper_password(paper_password_filename):
     try: 
         
         args = "-a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > " + paper_password_filename 
-        subprocess.check_output(["apg", args) # puts the password into the file
+        subprocess.check_output(["apg", args]) # puts the password into the file
         
         #get it into a variable so you can return it. there must be a better way?
         args = paper_password_filename
-        paper_password = subprocess.check_output(["cat", args)
+        paper_password = subprocess.check_output(["cat", args])
                 
         return paper_password   
 
@@ -292,31 +298,62 @@ if __name__ == '__main__':
         # test things
         splash(u"meow")
         print_test_page()
+        
+        print "testing to see if geth is present..."
         test_geth()                                                           #- make sure geth is present in the system. die with directions if not.
 
         # generate materials
-        working_directory_handle, working_directory_name = tempfile.mkdtemp() # generate temp directory to hold wallet. if we must store files, use a somewhat secure temp directory. Note we want to eliminate all this in v2 by eliminating geth entirely
+        working_directory_name = tempfile.mkdtemp()                           # generate temp directory to hold wallet. if we must store files, use a somewhat secure temp directory. Note we want to eliminate all this in v2 by eliminating geth entirely
+        print "working directory name is " + working_directory_name
+        debug = raw_input( 'press any key to continue...')
+        
         wallet_password_handle, wallet_password_filename = tempfile.mkstemp() # genrate temp file to hold wallet password. if we must store passwords on disk, use a somewhat secure filename
+        print "wallet password filename is " + wallet_password_filename 
+        debug = raw_input( 'press any key to continue...')
+        
         paper_password_handle, paper_password_filename = tempfile.mkstemp()   # generate temp file for paper password. needed as qrencode funciton in this version wants an input file  
+        print "paper password filename is " + paper_password_filename     
+        debug = raw_input( 'press any key to continue...')
              
         generate_wallet_password( wallet_password_filename )                  # generate a strong password for the wallet, place it in the file created above
+        print "wallet password generated"
+        debug = raw_input( 'press any key to continue...')
+        
         wallet_material_name = generate_wallet( working_directory_name, wallet_password_filename )   # using geth command line, generate a wallet
+        print "wallet generated. wallet " + wallet_material_name
+        debug = raw_input( 'press any key to continue...')
+        
         full_wallet_material_name = working_directory_name + wallet_material_name[-40:] + ".json"
-   
+        print "full wallet file name is " + full_wallet_material_name
+        debug = raw_input( 'press any key to continue...')
         
         #encrypt things
         paper_password = generate_paper_password( paper_password_filename )   # generate a password to encrypt the wallet
+        print "paper password generated. password is " + paper_password
+        debug = raw_input( 'press any key to continue...')
+                
         encrypted_wallet_filename = secure_wallet(full_wallet_material_name, paper_password)              # encrypt the wallet using the paper password
+        print "wallet is encrypted and stored in " + full_wallet_filename
+        debug = raw_input( 'press any key to continue...')
+        
+        
         
         # qr encode things and print all the materials
         qr_page_message = "this is the account password for the Ethereum wallet. Use it to unlock the wallet when using the wallet."
         qr_encode_material( wallet_password_filename, wallet_material_name, qr_page_message )  # qr_encode and print the wallet password
-        
+        print "sent qr encoded account password to printer"
+        debug = raw_input( 'press any key to continue...')
+                
         qr_page_message = "this is the paper password used to encrypt the Ethereum. Use it to decrypt the wallet when decoding the Wallet QR Code."
         qr_encode_material( paper_password_filename, wallet_material_name, qr_page_message )   # qrencode and print the paper password
+        print "sent qr encoded password for encrypted wallet file to printer"
+        debug = raw_input( 'press any key to continue...')
         
-        qr_page_message = "this is the encrypted Etereum Wallet. Read it using a QR reader, decrypt it using the paper password, and unlock it using the account password"
+        qr_page_message = "this is the encrypted Ethereum Wallet. Read it using a QR reader, decrypt it using the paper password, and unlock it using the account password"
         qr_encode_material( encrypted_wallet_filename, wallet_material_name, qr_page_message ) # qr encode the encyrpted wallet and print the QR code
+        print "sent qr encoded encrypted wallet to printer"
+        debug = raw_input( 'press any key to continue...')
+        
         sys.exit(0)
         
     except Exception as e:
