@@ -162,9 +162,9 @@ def generate_wallet_password(wallet_password_filename):
      
     try: 
         
-        args = "-a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > " + wallet_password_filename
-        subprocess.check_output(["apg", args])    
-
+        args = "apg -a 1 -n 1 -m 16 -x 16 -M SNCL -c cl_seed -q > " + wallet_password_filename
+        subprocess.call(args, shell=True,)    
+                
     except Exception as e:
         splash("uh oh")
         print "wallet password generation failed with error: " + e
@@ -177,8 +177,8 @@ def generate_wallet( working_directory_name, wallet_password_filename):
     """     
     
     try: 
-        args = "--datadir " + working_directory_name + " --password " + wallet_password_filename + "  account new"
-        wallet_material_name = subprocess.check_output(["geth", args])    
+        args = "geth --datadir " + working_directory_name + " --password " + wallet_password_filename + "  account new"
+        wallet_material_name = subprocess.check_output(args, shell=True,)    
         return wallet_material_name
 
     except Exception as e:
@@ -323,7 +323,7 @@ if __name__ == '__main__':
         print "wallet generated. wallet " + wallet_material_name
         debug = raw_input( 'press any key to continue...')
         
-        full_wallet_material_name = working_directory_name + wallet_material_name[-40:] + ".json"
+        full_wallet_material_name = working_directory_name + "/keystore/" + wallet_material_name[wallet_material_name.find('{')+1:wallet_material_name.find('}')] + "/" + wallet_material_name[wallet_material_name.find('{')+1:wallet_material_name.find('}')]
         print "full wallet file name is " + full_wallet_material_name
         debug = raw_input( 'press any key to continue...')
         
