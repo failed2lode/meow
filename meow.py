@@ -232,22 +232,24 @@ def secure_wallet(full_wallet_material_name, paper_password):
     return wallet_b64
     
 
-def qr_encode_material(material, wallet_address, qr_page_message):
+def qr_encode_material(wallet_password_filename, wallet_material_name, qr_page_message):
     import pyqrcode
     qr = None
-    with open(material, 'r') as fin:
+    with open(wallet_password_filename, 'r') as fin:
         qr = pyqrcode.create(fin.read(), version=40, error='M')
-        # qr.png("wallet.png") # this will write the qrcode to the disk. only uncomment if you want that
+        qr_temp_file_name = working_directory_name + "/qrtempfile.eps"
+        # print "temp QRcode file is " + qr_temp_file_name
+        qr.eps(qr_temp_file_name, scale=2.5) # this will write the qrcode to the disk. only uncomment if you want that
 
         #generate page    
         print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 16) #may want to play with this; very ubuntu specific.  
-        
+        qr = Image.open(qr_temp_file_name)
         qr_page = Image.new("RGB", (850, 1100), 'white')  # assuming an 8.5 x 11 page at 300 DPI, no margin, fully specified
             
         #    lay out the page   
         draw = ImageDraw.Draw(qr_page)
         draw.text((10 ,10), ' /\_/\  ',(0,0,0),font=print_font)
-        draw.text((10 ,24), "(='.'=) meow offline material for wallet" + wallet_addresss ,(0,0,0),font=print_font)
+        draw.text((10 ,24), "(='.'=) meow offline material for wallet" + wallet_material_name ,(0,0,0),font=print_font)
         draw.text((10,40), ' > ^ <  ',(0,0,0),font=print_font)
         draw.text((10,46), qr_page_message ,(0,0,0),font=print_font)
         
@@ -273,7 +275,7 @@ def qr_encode_material(material, wallet_address, qr_page_message):
                             
                 output.close() # what happens when this is here?
                 
-                qr_print_success = raw_input( 'Did the [item] print for wallet ' + wallet_address + ' successfully? (Yes | Retry | Quit)')
+                qr_print_success = raw_input( 'Did the item ' + qr_page_message + ' print for wallet ' + wallet_material_name + ' successfully? (Yes | Retry | Quit)')
                 if qr_print_success.lower()[0] == 'q':
                     splash('goodbye!')
                     raise Exception('Program cancelled by User')
@@ -324,10 +326,9 @@ if __name__ == '__main__':
         #encrypt things
         paper_password = generate_paper_password( paper_password_filename )   # generate a password to encrypt the wallet
         print "paper password generated. password is " + paper_password
-        debug = raw_input( 'press any key to continue...')
                 
-        encrypted_wallet_filename = secure_wallet(full_wallet_material_name, paper_password)              # encrypt the wallet using the paper password
-        print "wallet is encrypted and stored in " + full_wallet_filename
+        encrypted_wallet_filename = secure_wallet(full_wallet_material_name, paper_password)   # encrypt the wallet using the paper password
+        print "wallet is encrypted and stored in " + encrypted_wallet_filename
         debug = raw_input( 'press any key to continue...')
         
         
