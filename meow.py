@@ -238,8 +238,8 @@ def qr_encode_material(wallet_password_filename, wallet_material_name, qr_page_m
     with open(wallet_password_filename, 'r') as fin:
         qr = pyqrcode.create(fin.read(), version=40, error='M')
         qr_temp_file_name = working_directory_name + "/qrtempfile.eps"
-        # print "temp QRcode file is " + qr_temp_file_name
         qr.eps(qr_temp_file_name, scale=2.5) # this will write the qrcode to the disk. only uncomment if you want that
+        
 
         #generate page    
         print_font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 16) #may want to play with this; very ubuntu specific.  
@@ -252,11 +252,17 @@ def qr_encode_material(wallet_password_filename, wallet_material_name, qr_page_m
         draw.text((10 ,24), "(='.'=) meow offline material for wallet" + wallet_material_name ,(0,0,0),font=print_font)
         draw.text((10,40), ' > ^ <  ',(0,0,0),font=print_font)
         draw.text((10,46), qr_page_message ,(0,0,0),font=print_font)
+        draw = ImageDraw.Draw(qr_page)
         
-        qr.paste(qr_page, (10, 50))
+        qr_page.paste(qr, (10, 70))
         
         # uncomment these if you want a separate on-disk file of some sort. note we are not setting local directory here
-        #test_page.save('test_page.jpg', 'JPEG')
+        # qr_temp_file_name_jpeg = working_directory_name + "/qrtempfile.jpeg"
+        # qr_page.save(qr_temp_file_name_jpeg, 'JPEG')
+        # print "temp sample QRcode jpeg file is " + qr_temp_file_name_jpeg
+        # debug = raw_input( 'press any key to continue...')
+        
+        
         #test_page.save('test_page.png', 'PNG')
         #test_page.save('test_page.bmp', 'BMP')
             
@@ -268,7 +274,7 @@ def qr_encode_material(wallet_password_filename, wallet_material_name, qr_page_m
                 # generate the page
                 lpr =  subprocess.Popen(["/usr/bin/lpr", '-E'], stdin=subprocess.PIPE)
                 output = StringIO.StringIO()
-                format = 'PNG' # or 'JPEG' or whatever you want
+                format = 'jpeg' # or 'JPEG' or whatever you want
                 
                 qr_page.save(output, format)
                 lpr.communicate(output.getvalue())
@@ -336,18 +342,12 @@ if __name__ == '__main__':
         # qr encode things and print all the materials
         qr_page_message = "this is the account password for the Ethereum wallet. Use it to unlock the wallet when using the wallet."
         qr_encode_material( wallet_password_filename, wallet_material_name, qr_page_message )  # qr_encode and print the wallet password
-        print "sent qr encoded account password to printer"
-        debug = raw_input( 'press any key to continue...')
-                
+         
         qr_page_message = "this is the paper password used to encrypt the Ethereum. Use it to decrypt the wallet when decoding the Wallet QR Code."
         qr_encode_material( paper_password_filename, wallet_material_name, qr_page_message )   # qrencode and print the paper password
-        print "sent qr encoded password for encrypted wallet file to printer"
-        debug = raw_input( 'press any key to continue...')
         
         qr_page_message = "this is the encrypted Ethereum Wallet. Read it using a QR reader, decrypt it using the paper password, and unlock it using the account password"
         qr_encode_material( encrypted_wallet_filename, wallet_material_name, qr_page_message ) # qr encode the encyrpted wallet and print the QR code
-        print "sent qr encoded encrypted wallet to printer"
-        debug = raw_input( 'press any key to continue...')
         
         sys.exit(0)
         
